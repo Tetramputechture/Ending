@@ -1,6 +1,7 @@
 package ending.tile.door;
 
 import ending.tile.Tile;
+import ending.tile.TileTextures;
 import ending.tile.TileType;
 import ending.util.TextureUtils;
 
@@ -13,7 +14,7 @@ public class DoorTile extends Tile {
     public DoorTile() {
         super();
         setPassable(false);
-        sprite.setTexture(TextureUtils.getTexture("sprites/tiles/door.png"));
+        sprite.setTexture(TileTextures.DOORTEXTURE);
     }
     
     public static TileType getType() {

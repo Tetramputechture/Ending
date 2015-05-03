@@ -1,5 +1,6 @@
 package ending.tile.floor;
 
+import ending.tile.TileTextures;
 import ending.tile.TileType;
 import ending.util.TextureUtils;
 
@@ -11,7 +12,7 @@ public class DirtFloorTile extends FloorTile {
     
     public DirtFloorTile() {
         super();
-        sprite.setTexture(TextureUtils.getTexture("sprites/tiles/dirtfloor.png"));
+        sprite.setTexture(TileTextures.DIRTFLOORTEXTURE);
     }
 
     public static TileType getType() {

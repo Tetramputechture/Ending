@@ -1,5 +1,6 @@
 package ending.tile.wall;
 
+import ending.tile.TileTextures;
 import ending.tile.TileType;
 import ending.util.TextureUtils;
 
@@ -11,7 +12,7 @@ public class StoneWallTile extends WallTile {
     
     public StoneWallTile() {
         super();
-        sprite.setTexture(TextureUtils.getTexture("sprites/tiles/stonewall.png"));
+        sprite.setTexture(TileTextures.STONEWALLTEXTURE);
     }
     
     public static TileType getType() {

@@ -11,7 +11,7 @@ public class UnusedTile extends Tile {
     public UnusedTile() {
         super();
         setPassable(false);
-        sprite.setTexture(TextureUtils.getTexture("sprites/tiles/unused.png"));
+        sprite.setTexture(TileTextures.UNUSEDTEXTURE);
     }
     
     public static TileType getType() {

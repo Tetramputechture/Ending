@@ -1,6 +1,7 @@
 package ending.tile.stairs;
 
 import ending.tile.Tile;
+import ending.tile.TileTextures;
 import ending.tile.TileType;
 import ending.util.TextureUtils;
 
@@ -13,7 +14,7 @@ public class UpStairsTile extends Tile {
     public UpStairsTile() {
         super();
         setPassable(true);
-        sprite.setTexture(TextureUtils.getTexture("sprites/tiles/upstairs.png"));
+        sprite.setTexture(TileTextures.UPSTAIRSTEXTURE);
     }
     
     public static TileType getType() {

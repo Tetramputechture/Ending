@@ -35,38 +35,27 @@ public abstract class Tile implements Drawable {
     }
 
     public static Tile getTile(TileType tileType) {
-        if (tileType == null) {
-            return null;
-            
-        } else if (tileType == TileType.UNUSED) {
-            return new UnusedTile();
-            
-        } else if (tileType == TileType.DIRTFLOOR) {
-            return new DirtFloorTile();
-            
-        } else if (tileType == TileType.STONEFLOOR) {
-            return new StoneFloorTile();
-            
-        } else if (tileType == TileType.STONECORRIDOR) {
-            return new StoneCorridorTile();
-            
-        } else if (tileType == TileType.DOOR) {
-            return new DoorTile();
-            
-        } else if (tileType == TileType.DIRTWALL) {
-            return new DirtWallTile();
-            
-        } else if (tileType == TileType.STONEWALL) {
-            return new StoneWallTile();
-            
-        } else if (tileType == TileType.DOWNSTAIRS) {
-            return new DownStairsTile();
-            
-        } else if (tileType == TileType.UPSTAIRS) {
-            return new UpStairsTile();
-            
-        } else {
-            return null;
+        switch (tileType) {
+            case UNUSED:
+                return new UnusedTile();
+            case DIRTFLOOR:
+                return new DirtFloorTile();
+            case STONEFLOOR:
+                return new StoneFloorTile();
+            case STONECORRIDOR:
+                return new StoneCorridorTile();
+            case DOOR:
+                return new DoorTile();
+            case DIRTWALL:
+                return new DirtWallTile();
+            case STONEWALL:
+                return new StoneWallTile();
+            case DOWNSTAIRS:
+                return new DownStairsTile();
+            case UPSTAIRS:
+                return new UpStairsTile();
+            default:
+                return null;
         }
     }
 

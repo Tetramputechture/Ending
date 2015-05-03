@@ -8,9 +8,9 @@ import org.jsfml.graphics.Texture;
  *
  * @author Nick
  */
-public class TextureUtils {
+public final class TextureUtils {
 
-    public static Texture getTexture(String filename) {
+    public static Texture loadTexture(String filename) {
         Texture t = new Texture();
         try {
             t.loadFromFile(Paths.get(filename));

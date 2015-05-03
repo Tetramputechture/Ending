@@ -92,7 +92,7 @@ public class DungeonGenerator {
             return false;
         }
 
-        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
+        dungeon.setCellsType(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
 
         return true;
     }
@@ -141,8 +141,8 @@ public class DungeonGenerator {
             return false;
         }
 
-        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONEWALL);
-        dungeon.setCells(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, TileType.STONEFLOOR);
+        dungeon.setCellsType(xStart, yStart, xEnd, yEnd, TileType.STONEWALL);
+        dungeon.setCellsType(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, TileType.STONEFLOOR);
 
         return true;
     }
@@ -159,14 +159,14 @@ public class DungeonGenerator {
 
         if (chance <= chanceRoom) {
             if (makeRoom(dungeon, rand, x + xmod, y + ymod, 8, 6, direction)) {
-                dungeon.setCell(x, y, TileType.DOOR);
-                dungeon.setCell(x + xmod, y + ymod, TileType.STONEFLOOR);
+                dungeon.setCellType(x, y, TileType.DOOR);
+                dungeon.setCellType(x + xmod, y + ymod, TileType.STONEFLOOR);
                 return true;
             }
             return false;
         } else {
             if (makeCorridor(dungeon, rand, x + xmod, y + ymod, 6, direction)) {
-                dungeon.setCell(x, y, TileType.DOOR);
+                dungeon.setCellType(x, y, TileType.DOOR);
                 return true;
             }
             return false;
@@ -185,11 +185,11 @@ public class DungeonGenerator {
             int x = randInt(rand, 1, size.x - 2);
             int y = randInt(rand, 1, size.y - 2);
 
-            TileType cellXY = dungeon.getCell(x, y);
-            TileType cellXPlusOneY = dungeon.getCell(x + 1, y);
-            TileType cellXMinusOneY = dungeon.getCell(x - 1, y);
-            TileType cellXYPlusOne = dungeon.getCell(x, y + 1);
-            TileType cellXYMinusOne = dungeon.getCell(x, y - 1);
+            TileType cellXY = dungeon.getCellType(x, y);
+            TileType cellXPlusOneY = dungeon.getCellType(x + 1, y);
+            TileType cellXMinusOneY = dungeon.getCellType(x - 1, y);
+            TileType cellXYPlusOne = dungeon.getCellType(x, y + 1);
+            TileType cellXYMinusOne = dungeon.getCellType(x, y - 1);
 
             if (!(cellXY == TileType.STONEWALL || cellXY == TileType.STONECORRIDOR)) {
                 continue;
@@ -235,7 +235,7 @@ public class DungeonGenerator {
                 continue;
             }
 
-            dungeon.setCell(x, y, tileType);
+            dungeon.setCellType(x, y, tileType);
 
             return true;
         }
@@ -249,7 +249,7 @@ public class DungeonGenerator {
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 if (y == 0 || y == size.y - 1 || x == 0 || x == size.x - 1) {
-                    dungeon.setCell(x, y, TileType.STONEWALL);
+                    dungeon.setCellType(x, y, TileType.STONEWALL);
                 }
             }
         }
@@ -273,12 +273,15 @@ public class DungeonGenerator {
         
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
-                if (dungeon.getCell(x, y) == TileType.UNUSED) {
-                    dungeon.setCell(x, y, TileType.STONEWALL);
+                if (dungeon.getCellType(x, y) == TileType.UNUSED) {
+                    dungeon.setCellType(x, y, TileType.STONEWALL);
                 }
                 
             }
         }
+        
+        // compile sprites from types, to be drawn
+        dungeon.compile();
         
         double time = (System.nanoTime()-start)/1e9;
         
