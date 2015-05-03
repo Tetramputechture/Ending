@@ -2,19 +2,24 @@ package ending.tile.floor;
 
 import ending.tile.TileTextures;
 import ending.tile.TileType;
-import ending.util.TextureUtils;
 
 /**
- *
+ * The Dirt Floor Tile.
  * @author Nick
  */
 public class DirtFloorTile extends FloorTile {
     
+    /**
+     * Initializes the Sprite of this FloorTile.
+     */
     public DirtFloorTile() {
         super();
         sprite.setTexture(TileTextures.DIRTFLOORTEXTURE);
     }
 
+    /**
+     * @return TileType.DIRTFLOOR.
+     */
     public static TileType getType() {
         return TileType.DIRTFLOOR;
     }

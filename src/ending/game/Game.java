@@ -7,13 +7,16 @@ import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 
 /**
- *
+ * Handles all Game logic. 
  * @author Nick
  */
 public class Game implements Drawable {
     
-    private Dungeon dungeon;
+    private final Dungeon dungeon;
     
+    /**
+     * Generates a new Dungeon.
+     */
     public Game() {
         DungeonGenerator dg = new DungeonGenerator();
         dungeon = dg.generate(40, 30);

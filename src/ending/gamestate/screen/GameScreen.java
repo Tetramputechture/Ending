@@ -5,13 +5,16 @@ import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 
 /**
- *
- * @author Cliff
+ * The Screen for the Game to be displayed on.
+ * @author Nick
  */
 public class GameScreen extends Screen {
     
     private final Game game;
     
+    /**
+     * Instantiates a new Game for this GameScreen to display.
+     */
     public GameScreen() {
         game = new Game();
     }

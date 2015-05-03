@@ -5,12 +5,12 @@ import ending.vector.Vector2i;
 import java.util.Random;
 
 /**
- *
+ * Generates a Dungeon based on a seed, and saves the seed.
  * @author Nick
  */
 public class DungeonGenerator {
 
-    private long seed;
+    private final long seed;
 
     private Vector2i size;
 
@@ -18,17 +18,39 @@ public class DungeonGenerator {
 
     private final int chanceRoom;
 
+    /**
+     * Generates a new Dungeon based on a random seed.
+     */
     public DungeonGenerator() {
         seed = System.currentTimeMillis();
-        size = new Vector2i(80, 25);
         maxFeatures = 200;
         chanceRoom = 75;
     }
     
-    public void setSeed(long seed) {
+    /**
+     * Generates a new Dungeon based on a seed.
+     * @param seed the seed for this Dungeon Generator's Random object to use.
+     */
+    public DungeonGenerator(long seed) {
         this.seed = seed;
+        maxFeatures = 200;
+        chanceRoom = 75;
     }
     
+    /**
+     * Gets the Random seed used by this Dungeon Generator.
+     * @return the Random seed used by this Dungeon Generator.
+     */
+    public long getSeed() {
+        return seed;
+    }
+    
+    /**
+     * Generates a new Dungeon. 
+     * @param x the number of columns of the Dungeon.
+     * @param y the number of rows of the Dungeon.
+     * @return the generated Dungeon.
+     */
     public Dungeon generate(int x, int y) {
         Random rand = new Random(seed);
         size = new Vector2i(x, y);

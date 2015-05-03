@@ -14,6 +14,9 @@ public final class AudioHandler {
     
     private final Sound sound;
     
+    /**
+     * Constructs a new Sound object to hold the SoundBuffer.
+     */
     public AudioHandler() {
         sound = new Sound();
     }

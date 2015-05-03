@@ -60,11 +60,20 @@ public class Button extends Widget {
         frame.setBorderRect(buttonBorder);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setPosition(float x, float y) {
         label.setPosition(x, y);
         updateFrame();
     }
 
+    /**
+     *
+     * @return
+     */
     public Label getLabel() {
         return label;
     }
@@ -79,6 +88,10 @@ public class Button extends Widget {
         updateFrame();
     }
 
+    /**
+     *
+     * @return
+     */
     public Frame getFrame() {
         return frame;
     }

@@ -18,6 +18,11 @@ public class Frame extends Widget {
 
     private FloatRect boundingRect;
 
+    /**
+     *
+     * @param borderRect
+     * @param fillColor
+     */
     public Frame(RectangleShape borderRect, Color fillColor) {
         this.borderRect = borderRect;
         this.borderRect.setFillColor(fillColor);
@@ -36,27 +41,52 @@ public class Frame extends Widget {
         }
     }
 
+    /**
+     *
+     * @param borderRect
+     */
     public void setBorderRect(RectangleShape borderRect) {
         this.borderRect = borderRect;
         boundingRect = borderRect.getGlobalBounds();
     }
 
+    /**
+     *
+     * @param color
+     */
     public void setBorderColor(Color color) {
         borderRect.setOutlineColor(color);
     }
 
+    /**
+     *
+     * @return
+     */
     public Color getBorderColor() {
         return borderRect.getOutlineColor();
     }
 
+    /**
+     *
+     * @param color
+     */
     public void setFillColor(Color color) {
         borderRect.setFillColor(color);
     }
 
+    /**
+     *
+     * @return
+     */
     public Color getFillColor() {
         return borderRect.getFillColor();
     }
 
+    /**
+     *
+     * @param v
+     * @return
+     */
     public boolean contains(Vector2i v) {
         return boundingRect.contains(v.x, v.y);
     }

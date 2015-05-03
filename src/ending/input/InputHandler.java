@@ -1,6 +1,6 @@
 package ending.input;
 
-import ending.gamestate.GameState;
+import ending.gamestate.State;
 import org.jsfml.graphics.RenderWindow;
 import ending.vector.Vector2i;
 import ending.widget.Button;
@@ -12,11 +12,15 @@ import org.jsfml.window.event.MouseButtonEvent;
 import org.jsfml.window.event.MouseEvent;
 
 /**
- *
+ * Handles all key presses and mouse actions.
  * @author Nick
  */
 public class InputHandler {
 
+    /**
+     * Handles the input of a RenderWindow.
+     * @param rw the RenderWindow for this inputHandler to handle.
+     */
     public void handleInput(RenderWindow rw) {
         for (Event event : rw.pollEvents()) {
             switch (event.type) {
@@ -43,7 +47,7 @@ public class InputHandler {
     private void handleMouseMove(MouseEvent mouseEvent) {
         Vector2i mousePos = new Vector2i(mouseEvent.position);
 
-        for (Widget w : GameState.getCurrentScreen().getWidgets()) {
+        for (Widget w : State.getCurrentScreen().getWidgets()) {
             if (w instanceof Button) {
                 Button b = (Button) w;
                 if (b.getFrame().contains(mousePos)) {
@@ -59,7 +63,7 @@ public class InputHandler {
         Vector2i mousePos = new Vector2i(mouseButtonEvent.position);
 
         if (mouseButtonEvent.button == Mouse.Button.LEFT) {
-            for (Widget w : GameState.getCurrentScreen().getWidgets()) {
+            for (Widget w : State.getCurrentScreen().getWidgets()) {
                 if (w instanceof Button) {
                     Button b = (Button) w;
                     if (b.getFrame().contains(mousePos)) {

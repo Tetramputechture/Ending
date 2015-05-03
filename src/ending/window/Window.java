@@ -1,7 +1,6 @@
 package ending.window;
 
-import ending.audio.AudioHandler;
-import ending.gamestate.GameState;
+import ending.gamestate.State;
 import ending.gamestate.screen.ScreenType;
 import ending.input.InputHandler;
 import org.jsfml.graphics.RenderWindow;
@@ -17,19 +16,26 @@ public class Window {
     
     private final InputHandler input;
     
+    /**
+     *
+     * @param title
+     */
     public Window(String title) {
         rw = new RenderWindow();
         rw.create(new VideoMode(WindowConfig.WINDOW_WIDTH, WindowConfig.WINDOW_HEIGHT), title);
         
         input = new InputHandler();
         
-        GameState.setCurrentScreen(ScreenType.MAIN_MENU);
+        State.setCurrentScreen(ScreenType.MAIN_MENU);
     }
     
+    /**
+     *
+     */
     public void display() {
         while (rw.isOpen()) {
             input.handleInput(rw);
-            rw.draw(GameState.getCurrentScreen());
+            rw.draw(State.getCurrentScreen());
             rw.display();
         }
     }

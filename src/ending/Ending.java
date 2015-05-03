@@ -8,6 +8,10 @@ import ending.window.Window;
  */
 public class Ending {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Window window = new Window("test");   
         window.display();

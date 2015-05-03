@@ -5,11 +5,16 @@ import java.nio.file.Paths;
 import org.jsfml.graphics.Texture;
 
 /**
- *
+ * Handles all Texture utilities.
  * @author Nick
  */
 public final class TextureUtils {
 
+    /**
+     * Loads a texture from a file.
+     * @param filename the filename of the texture.
+     * @return a new Texture based on the filename's image; null if file not found.
+     */
     public static Texture loadTexture(String filename) {
         Texture t = new Texture();
         try {

@@ -16,24 +16,49 @@ import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2f;
 
 /**
- *
+ * A Tile that encapsulates every object within a Dungeon.
  * @author Nick
  */
 public abstract class Tile implements Drawable {
+    
+    /**
+     * The width of every Tile.
+     */
+    public static final int TILE_WIDTH = 16;
 
+    /**
+     * The height of every Tile.
+     */
+    public static final int TILE_HEIGHT = 16;
+
+    /**
+     * The Sprite of this Tile.
+     */
     protected final Sprite sprite;
 
     private boolean passable;
 
+    /**
+     * Initializes the Sprite of this Tile, and sets its Passable field to false.
+     */
     public Tile() {
         sprite = new Sprite();
         passable = false;
     }
 
+    /**
+     * Returns the TileType of this Tile.
+     * @return the TileType of this tile; all types found in TileTypes.
+     */
     public static TileType getType() {
         return null;
     }
 
+    /**
+     * Returns a new instance of a Tile based on a TileType.
+     * @param tileType the type of Tile to return.
+     * @return a new Tile of type tileType.
+     */
     public static Tile getTile(TileType tileType) {
         switch (tileType) {
             case UNUSED:
@@ -59,14 +84,28 @@ public abstract class Tile implements Drawable {
         }
     }
 
+    /**
+     * Sets the position of this Tile's sprite.
+     * @param x the x position of this Tile.
+     * @param y the y position of this Tile.
+     */
     public void setPosition(int x, int y) {
         sprite.setPosition(new Vector2f(x, y));
     }
 
+    /**
+     * Returns if this Tile is passable by other Tiles or not.
+     * @return <code>true</code> if this Tile is passable by other Tiles,
+     * <code>false</code> if not.
+     */
     public boolean isPassable() {
         return passable;
     }
 
+    /**
+     * Sets if this Tile is passable or not.
+     * @param passable the state to change this Tile's passable field to.
+     */
     public void setPassable(boolean passable) {
         this.passable = passable;
     }
@@ -75,27 +114,4 @@ public abstract class Tile implements Drawable {
     public void draw(RenderTarget rt, RenderStates states) {
         rt.draw(sprite);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || o.getClass() != getClass()) {
-            return false;
-        }
-
-        Tile other = (Tile) o;
-
-        return getType().equals(other.getType());
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.sprite);
-        hash = 59 * hash + (this.passable ? 1 : 0);
-        return hash;
-    }
-
 }

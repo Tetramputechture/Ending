@@ -39,30 +39,59 @@ public class Label extends Widget {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Text getTextObject() {
         return text;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return text.getString();
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setText(String text) {
         this.text.setString(text);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setPosition(float x, float y) {
         text.setPosition(new Vector2f(x, y).toVector2f());
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector2f getPosition() {
         return new Vector2f(text.getPosition());
     }
 
+    /**
+     *
+     * @param color
+     */
     public void setColor(Color color) {
         text.setColor(color);
     }
 
+    /**
+     *
+     * @return
+     */
     public Color getColor() {
         return text.getColor();
     }
