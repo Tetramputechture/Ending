@@ -20,7 +20,7 @@ public class StoneWallTile extends WallTile {
     /**
      * @return TileType.STONEWALL
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.STONEWALL;
     }
     

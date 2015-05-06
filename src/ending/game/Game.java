@@ -12,15 +12,20 @@ import org.jsfml.graphics.RenderTarget;
  */
 public class Game implements Drawable {
     
-    private final Dungeon dungeon;
+    private Dungeon dungeon;
+    
+    private final DungeonGenerator dg;
     
     /**
      * Generates a new Dungeon.
      */
     public Game() {
-        DungeonGenerator dg = new DungeonGenerator();
+        dg = new DungeonGenerator();
         dungeon = dg.generate(40, 30);
-        dungeon.compile();
+    }
+    
+    public void generateNewDungeon() {
+        dungeon = dg.generate(40, 30, System.currentTimeMillis());
     }
 
     @Override

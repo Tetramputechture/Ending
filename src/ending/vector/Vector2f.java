@@ -57,6 +57,15 @@ public class Vector2f {
         this.x = v.x;
         this.y = v.y;
     }
+    
+    /**
+     * Constructs a new Vector2f based off of JSFML's Vector2i class.
+     * @param v
+     */
+    public Vector2f(org.jsfml.system.Vector2i v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
 
     /**
      * Converts a JSFML Vector2f to a native Vector2f.

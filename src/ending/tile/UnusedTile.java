@@ -18,7 +18,7 @@ public class UnusedTile extends Tile {
     /**
      * @return TileType.UNUSED.
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.UNUSED;
     }
     

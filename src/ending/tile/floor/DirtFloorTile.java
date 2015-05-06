@@ -20,7 +20,7 @@ public class DirtFloorTile extends FloorTile {
     /**
      * @return TileType.DIRTFLOOR.
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.DIRTFLOOR;
     }
     

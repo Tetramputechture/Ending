@@ -1,5 +1,6 @@
 package ending.tile;
 
+import ending.dungeon.Direction;
 import ending.tile.corridor.StoneCorridorTile;
 import ending.tile.door.DoorTile;
 import ending.tile.floor.DirtFloorTile;
@@ -8,11 +9,13 @@ import ending.tile.stairs.DownStairsTile;
 import ending.tile.stairs.UpStairsTile;
 import ending.tile.wall.DirtWallTile;
 import ending.tile.wall.StoneWallTile;
-import java.util.Objects;
+import ending.util.SpriteUtils;
+import java.util.Stack;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.Transform;
 import org.jsfml.system.Vector2f;
 
 /**
@@ -35,14 +38,36 @@ public abstract class Tile implements Drawable {
      * The Sprite of this Tile.
      */
     protected final Sprite sprite;
+    
+    private Transform transform;
 
+    private final Stack<Tile> children;
+    
     private boolean passable;
 
     /**
-     * Initializes the Sprite of this Tile, and sets its Passable field to false.
+     * Initializes the Sprite and children of this Tile, 
+     * and sets its Passable field to false.
      */
     public Tile() {
         sprite = new Sprite();
+        sprite.setPosition(0, 0);
+        transform = new Transform();
+        children = new Stack<>();
+        passable = false;
+    }
+    
+    /**
+     * Initializes the Sprite and children of this Tile, 
+     * and sets its Passable field to false.
+     * @param x the x position of the Tile.
+     * @param y the y position of the Tile.
+     */
+    public Tile(int x, int y) {
+        sprite = new Sprite();
+        sprite.setPosition(x, y);
+        transform = new Transform();
+        children = new Stack<>();
         passable = false;
     }
 
@@ -50,16 +75,14 @@ public abstract class Tile implements Drawable {
      * Returns the TileType of this Tile.
      * @return the TileType of this tile; all types found in TileTypes.
      */
-    public static TileType getType() {
-        return null;
-    }
+    public abstract TileType getType();
 
     /**
      * Returns a new instance of a Tile based on a TileType.
      * @param tileType the type of Tile to return.
      * @return a new Tile of type tileType.
      */
-    public static Tile getTile(TileType tileType) {
+    public static Tile getTileFromTileType(TileType tileType) {
         switch (tileType) {
             case UNUSED:
                 return new UnusedTile();
@@ -70,7 +93,7 @@ public abstract class Tile implements Drawable {
             case STONECORRIDOR:
                 return new StoneCorridorTile();
             case DOOR:
-                return new DoorTile();
+                return new DoorTile(0, 0, Direction.NORTH);
             case DIRTWALL:
                 return new DirtWallTile();
             case STONEWALL:
@@ -83,14 +106,59 @@ public abstract class Tile implements Drawable {
                 return null;
         }
     }
+    
+    /**
+     * Gets the X coordinate of this Tile's sprite.
+     * @return the x coordinate of this Tile's position.
+     */
+    public float getPositionX() {
+        return sprite.getPosition().x;
+    }
+    
+    /**
+     * Gets the Y coordinate of this Tile's sprite.
+     * @return the Y coordinate of this Tile's position.
+     */
+    public float getPositionY() {
+        return sprite.getPosition().y;
+    }
+    
+    public float getRotation() {
+        return sprite.getRotation();
+    }
+    
+    public void rotateAroundCenter(float degrees) {
+        ending.vector.Vector2f center = SpriteUtils.getTextureCenter(TileTextures.DOORTEXTURE);
+        ending.vector.Vector2f rotateOrigin = new ending.vector.Vector2f(sprite.getPosition()).add(center);
+        transform = Transform.rotate(transform, degrees, rotateOrigin.x, rotateOrigin.y);
+    }
 
     /**
-     * Sets the position of this Tile's sprite.
-     * @param x the x position of this Tile.
-     * @param y the y position of this Tile.
+     * Sets the position of this Tile and its children.
+     * @param x the x position of this Tile and its children.
+     * @param y the y position of this Tile and its children.
      */
     public void setPosition(int x, int y) {
         sprite.setPosition(new Vector2f(x, y));
+        for (Tile t : children) {
+            t.setPosition(x, y);
+        }
+    }
+    
+    public Stack<Tile> getChildren() {
+        return children;
+    }
+    
+    public void pushTile(Tile tile) {
+        children.push(tile);
+    }
+    
+    public void pushTile(TileType tileType) {
+        children.push(getTileFromTileType(tileType));
+    }
+    
+    public Tile popTile() {
+        return children.pop();
     }
 
     /**
@@ -110,8 +178,17 @@ public abstract class Tile implements Drawable {
         this.passable = passable;
     }
 
-    @Override
     public void draw(RenderTarget rt, RenderStates states) {
-        rt.draw(sprite);
+        RenderStates newStates = new RenderStates(
+                states.blendMode,
+                Transform.combine(states.transform, transform),
+                sprite.getTexture(),
+                states.shader);
+        
+        sprite.draw(rt, newStates);
+        
+        for (Tile t : children) {
+            t.draw(rt, newStates);
+        }
     }
 }

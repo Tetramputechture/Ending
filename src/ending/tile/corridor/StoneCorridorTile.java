@@ -12,7 +12,7 @@ public class StoneCorridorTile extends StoneFloorTile {
     /**
      * @return TileType.STONECORRIDOR.
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.STONECORRIDOR;
     }
     

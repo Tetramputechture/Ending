@@ -22,7 +22,7 @@ public class DownStairsTile extends Tile {
     /**
      * @return TileType.DOWNSTAIRS.
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.DOWNSTAIRS;
     }
     

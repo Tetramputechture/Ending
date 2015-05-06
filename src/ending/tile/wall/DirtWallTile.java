@@ -20,7 +20,7 @@ public class DirtWallTile extends WallTile {
     /**
      * @return TileType.DIRTWALL.
      */
-    public static TileType getType() {
+    public TileType getType() {
         return TileType.DIRTWALL;
     }
     

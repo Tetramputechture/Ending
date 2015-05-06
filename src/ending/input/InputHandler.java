@@ -41,7 +41,9 @@ public class InputHandler {
     }
 
     private void handleKeyPress(KeyEvent keyEvent) {
-
+        for (KeyListener k : State.getCurrentScreen().getKeyListeners()) {
+            k.keyPressed(keyEvent);
+        }
     }
 
     private void handleMouseMove(MouseEvent mouseEvent) {

@@ -71,7 +71,7 @@ public class Vector2i {
      * Example: (a1, a2) + (b1, b2) = (a1 + b1, a2 + b2)
      * @param x the x coordinate of the Vector2i to add.
      * @param y the y coordinate of the Vector2i to add.
-     * @return the Vector2i sum of the Vector2is.
+     * @return the Vector2i sum of the Vector2i's.
      */
     public Vector2i add(int x, int y) {
         return new Vector2i(this.x + x, this.y + y);
@@ -81,7 +81,7 @@ public class Vector2i {
      * Adds a Vector2i to this.
      * Example: (a1, a2) + (b1, b2) = (a1 + b1, a2 + b2)
      * @param v the Vector2i to add.
-     * @return the Vector2i sum of the Vector2is.
+     * @return the Vector2i sum of the Vector2i's.
      */
     public Vector2i add(Vector2i v) {
         return add(v.x, v.y);
@@ -92,7 +92,7 @@ public class Vector2i {
      * Example: (a1, a2) - (b1, b2) = (a1 - b1, a2 - b2)
      * @param x the x coordinate of the Vector2i to subtract.
      * @param y the y coordinate of the Vector2i to subtract.
-     * @return the Vector2i difference of the Vector2is.
+     * @return the Vector2i difference of the Vector2i's.
      */
     public Vector2i sub(int x, int y) {
         return add(-x, -y);
@@ -102,7 +102,7 @@ public class Vector2i {
      * Subtracts a Vector2i from this.
      * Example: (a1, a2) - (b1, b2) = (a1 - b1, a2 - b2)
      * @param v the Vector2i to subtract.
-     * @return the Vector2i difference of the Vector2is.
+     * @return the Vector2i difference of the Vector2i's.
      */
     public Vector2i sub(Vector2i v) {
         return sub(v.x, v.y);
@@ -113,7 +113,7 @@ public class Vector2i {
      * Example: (a1, a2) dot (b1, b2) = (a1 * b1, a2 * b2)
      * @param x the x coordinate of the Vector2i to dot. 
      * @param y the y coordinate of the Vector2i to dot.
-     * @return the dot product of the Vector2is.
+     * @return the dot product of the Vector2i's.
      */
     public int dot(int x, int y) {
         return this.x * x + this.y * y;
@@ -123,7 +123,7 @@ public class Vector2i {
      * Returns the dot product of this and another Vector2i.
      * Example: (a1, a2) dot (b1, b2) = (a1 * b1, a2 * b2)
      * @param v the Vector2i to dot this Vector2i with.
-     * @return the dot product of the Vector2is.
+     * @return the dot product of the Vector2i's.
      */
     public int dot(Vector2i v) {
         return dot(v.x, v.y);
@@ -208,10 +208,10 @@ public class Vector2i {
      * Returns the distance between this and another Vector2i.
      * @param x the x value of the Vector2i.
      * @param y the y value of the Vector2i.
-     * @return the distance between the two Vector2is.
+     * @return the distance between the two Vector2i's.
      */
     public int dst(int x, int y) {
-        // if two Vector2is are equal, distance is 0
+        // if two Vector2i's are equal, distance is 0
         if (equals(x, y)) {
             return 0;
         }
@@ -221,7 +221,7 @@ public class Vector2i {
     /**
      * Returns the distance between this and another Vector2i.
      * @param v the Vector2i.
-     * @return the distance between the two Vector2is.
+     * @return the distance between the two Vector2i's.
      */
     public int dst(Vector2i v) {
         return dst(v.x, v.y);
@@ -238,7 +238,7 @@ public class Vector2i {
     /**
      * Returns this angle between this Vector2i and another Vector2i.
      * @param v the Vector2i.
-     * @return the smallest angle, in radians, between the two Vector2is.
+     * @return the smallest angle, in radians, between the two Vector2i's.
      */
     public int angle(Vector2i v) {
         if (len() == 0 || v.len() == 0) {

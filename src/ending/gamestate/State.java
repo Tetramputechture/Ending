@@ -24,7 +24,7 @@ public final class State {
      * @param screenType the type of the Screen to set.
      */
     public static void setCurrentScreen(ScreenType screenType) {
-        currentScreen = Screen.getScreen(screenType);
+        currentScreen = Screen.getScreenBasedOnType(screenType);
     }
     
     /**

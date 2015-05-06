@@ -1,52 +1,59 @@
 package ending.dungeon;
 
+import ending.tile.Tile;
 import ending.tile.TileType;
+import ending.tile.door.DoorTile;
+import ending.tile.floor.StoneFloorTile;
 import ending.vector.Vector2i;
 import java.util.Random;
 
 /**
  * Generates a Dungeon based on a seed, and saves the seed.
+ *
  * @author Nick
  */
 public class DungeonGenerator {
 
-    private final long seed;
+    private long seed;
 
     private Vector2i size;
+
+    private final Vector2i minRoomSize;
+    private final Vector2i maxRoomSize;
+
+    private final int minCorridorLength;
+    private final int maxCorridorLength;
 
     private final int maxFeatures;
 
     private final int chanceRoom;
 
     /**
-     * Generates a new Dungeon based on a random seed.
+     * Sets this DungeonGenerator's seed randomly. To generate with a specific
+     * seed, use <code>generate(int x, int y, long seed)</code>.
      */
     public DungeonGenerator() {
         seed = System.currentTimeMillis();
+        minRoomSize = new Vector2i(4, 4);
+        maxRoomSize = new Vector2i(8, 6);
+        minCorridorLength = 2;
+        maxCorridorLength = 6;
         maxFeatures = 200;
         chanceRoom = 75;
     }
-    
-    /**
-     * Generates a new Dungeon based on a seed.
-     * @param seed the seed for this Dungeon Generator's Random object to use.
-     */
-    public DungeonGenerator(long seed) {
-        this.seed = seed;
-        maxFeatures = 200;
-        chanceRoom = 75;
-    }
-    
+
     /**
      * Gets the Random seed used by this Dungeon Generator.
+     *
      * @return the Random seed used by this Dungeon Generator.
      */
     public long getSeed() {
         return seed;
     }
-    
+
     /**
-     * Generates a new Dungeon. 
+     * Generates a new Dungeon based on a random seed.
+     *
      * @param x the number of columns of the Dungeon.
      * @param y the number of rows of the Dungeon.
      * @return the generated Dungeon.
@@ -59,6 +66,19 @@ public class DungeonGenerator {
         makeDungeon(dungeon, rand);
 
         return dungeon;
+    }
+
+    /**
+     * Generates a new Dungeon based on a seed.
+     *
+     * @param x the number of columns of the Dungeon.
+     * @param y the number of rows of the Dungeon.
+     * @param seed the seed of the RNG used by this Dungeon Generator.
+     * @return the generated Dungeon.
+     */
+    public Dungeon generate(int x, int y, long seed) {
+        this.seed = seed;
+        return generate(x, y);
     }
 
     private int randInt(Random rand, int min, int max) {
@@ -78,16 +98,16 @@ public class DungeonGenerator {
 
     private boolean makeCorridor(Dungeon dungeon,
             Random rand,
-            int x, int y,
-            int maxLength,
+            int x,
+            int y,
+            int doorX,
+            int doorY,
             Direction direction) {
 
         assert (x >= 0 && x < size.x);
         assert (y >= 0 && y < size.y);
 
-        assert (maxLength > 0 && maxLength <= Math.max(size.x, size.y));
-
-        int length = randInt(rand, 2, maxLength);
+        int length = randInt(rand, minCorridorLength, maxCorridorLength);
 
         int xStart = x;
         int yStart = y;
@@ -114,7 +134,14 @@ public class DungeonGenerator {
             return false;
         }
 
-        dungeon.setCellsType(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
+        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
+        
+        StoneFloorTile floorAndDoor = new StoneFloorTile();
+        DoorTile door = new DoorTile(doorX * Tile.TILE_WIDTH, doorY * Tile.TILE_HEIGHT, direction);
+        if (checkDoor(dungeon, doorX, doorY, direction)) {
+            floorAndDoor.pushTile(door);
+        }
+        dungeon.setCell(doorX, doorY, floorAndDoor);
 
         return true;
     }
@@ -123,12 +150,10 @@ public class DungeonGenerator {
             Random rand,
             int x,
             int y,
-            int xMaxLength,
-            int yMaxLength,
             Direction direction) {
 
-        int xLength = randInt(rand, 4, xMaxLength);
-        int yLength = randInt(rand, 4, yMaxLength);
+        int xLength = randInt(rand, minRoomSize.x, maxRoomSize.x);
+        int yLength = randInt(rand, minRoomSize.y, maxRoomSize.y);
 
         int xStart = x;
         int yStart = y;
@@ -163,8 +188,8 @@ public class DungeonGenerator {
             return false;
         }
 
-        dungeon.setCellsType(xStart, yStart, xEnd, yEnd, TileType.STONEWALL);
-        dungeon.setCellsType(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, TileType.STONEFLOOR);
+        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONEWALL);
+        dungeon.setCells(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, TileType.STONEFLOOR);
 
         return true;
     }
@@ -180,19 +205,35 @@ public class DungeonGenerator {
         int chance = randInt(rand, 0, 100);
 
         if (chance <= chanceRoom) {
-            if (makeRoom(dungeon, rand, x + xmod, y + ymod, 8, 6, direction)) {
-                dungeon.setCellType(x, y, TileType.DOOR);
-                dungeon.setCellType(x + xmod, y + ymod, TileType.STONEFLOOR);
+            if (makeRoom(dungeon, rand, x + xmod, y + ymod, direction)) {
+                
+                StoneFloorTile floorAndDoor = new StoneFloorTile();
+                DoorTile door = new DoorTile(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT, direction);
+                if (checkDoor(dungeon, x, y, direction)) {
+                    floorAndDoor.pushTile(door);
+                }
+                dungeon.setCell(x, y, floorAndDoor);
+                dungeon.setCell(x + xmod, y + ymod, TileType.STONEFLOOR);
+                
                 return true;
             }
             return false;
         } else {
-            if (makeCorridor(dungeon, rand, x + xmod, y + ymod, 6, direction)) {
-                dungeon.setCellType(x, y, TileType.DOOR);
+            return makeCorridor(dungeon, rand, x + xmod, y + ymod, x, y, direction);
+        }
+    }
+
+    private boolean checkDoor(Dungeon dungeon, int x, int y, Direction direction) {
+        if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+            if (dungeon.getCellType(x - 1, y) == TileType.STONEWALL
+                    && dungeon.getCellType(x + 1, y) == TileType.STONEWALL) {
                 return true;
             }
-            return false;
+        } else if (dungeon.getCellType(x, y - 1) == TileType.STONEWALL
+                && dungeon.getCellType(x, y + 1) == TileType.STONEWALL) {
+            return true;
         }
+        return false;
     }
 
     private boolean makeFeature(Dungeon dungeon, Random rand) {
@@ -215,10 +256,10 @@ public class DungeonGenerator {
 
             if (!(cellXY == TileType.STONEWALL || cellXY == TileType.STONECORRIDOR)) {
                 continue;
-            } 
+            }
 
             if (dungeon.isAdjacent(x, y, TileType.DOOR)) {
-                continue; 
+                continue;
             }
 
             if (cellXYPlusOne == TileType.STONEFLOOR || cellXYPlusOne == TileType.STONECORRIDOR) {
@@ -257,7 +298,7 @@ public class DungeonGenerator {
                 continue;
             }
 
-            dungeon.setCellType(x, y, tileType);
+            dungeon.setCell(x, y, tileType);
 
             return true;
         }
@@ -265,19 +306,19 @@ public class DungeonGenerator {
     }
 
     private boolean makeDungeon(Dungeon dungeon, Random rand) {
-        
+
         long start = System.nanoTime();
 
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 if (y == 0 || y == size.y - 1 || x == 0 || x == size.x - 1) {
-                    dungeon.setCellType(x, y, TileType.STONEWALL);
+                    dungeon.setCell(x, y, TileType.STONEWALL);
                 }
             }
         }
 
         // Make one room in the middle to start things off.
-        makeRoom(dungeon, rand, size.x / 2, size.y / 2, 8, 6, Direction.randDirection(rand));
+        makeRoom(dungeon, rand, size.x / 2, size.y / 2, Direction.randDirection(rand));
 
         for (int features = 1; features < maxFeatures; features++) {
             if (!makeFeature(dungeon, rand)) {
@@ -292,22 +333,19 @@ public class DungeonGenerator {
         if (!makeSpecialTile(dungeon, rand, TileType.DOWNSTAIRS)) {
             System.out.println("Unable to place down stairs");
         }
-        
+
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 if (dungeon.getCellType(x, y) == TileType.UNUSED) {
-                    dungeon.setCellType(x, y, TileType.STONEWALL);
+                    dungeon.setCell(x, y, TileType.STONEWALL);
                 }
-                
             }
         }
-        
-        // compile sprites from types, to be drawn
-        dungeon.compile();
-        
-        double time = (System.nanoTime()-start)/1e9;
-        
-        System.out.println("Dungeon generated in " + time + " seconds!");
+
+        double time = (System.nanoTime() - start) / 1e9;
+
+        System.out.println("Dungeon generated in " + time + " seconds with "
+                + "seed " + seed);
 
         return true;
     }
