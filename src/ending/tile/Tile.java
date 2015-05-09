@@ -1,5 +1,6 @@
 package ending.tile;
 
+import ending.actor.Player;
 import ending.dungeon.Direction;
 import ending.tile.corridor.StoneCorridorTile;
 import ending.tile.door.DoorTile;
@@ -27,12 +28,12 @@ public abstract class Tile implements Drawable {
     /**
      * The width of every Tile.
      */
-    public static final int TILE_WIDTH = 16;
+    public static final int TILE_WIDTH = 32;
 
     /**
      * The height of every Tile.
      */
-    public static final int TILE_HEIGHT = 16;
+    public static final int TILE_HEIGHT = 32;
 
     /**
      * The Sprite of this Tile.
@@ -102,6 +103,8 @@ public abstract class Tile implements Drawable {
                 return new DownStairsTile();
             case UPSTAIRS:
                 return new UpStairsTile();
+            case PLAYER:
+                return new Player();
             default:
                 return null;
         }
@@ -121,6 +124,10 @@ public abstract class Tile implements Drawable {
      */
     public float getPositionY() {
         return sprite.getPosition().y;
+    }
+    
+    public Vector2f getPosition() {
+        return sprite.getPosition();
     }
     
     public float getRotation() {
@@ -143,6 +150,10 @@ public abstract class Tile implements Drawable {
         for (Tile t : children) {
             t.setPosition(x, y);
         }
+    }
+    
+    public void move(int x, int y) {
+        sprite.move(x, y);
     }
     
     public Stack<Tile> getChildren() {

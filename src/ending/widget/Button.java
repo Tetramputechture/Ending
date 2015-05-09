@@ -1,6 +1,6 @@
 package ending.widget;
 
-import ending.widget.widgetlistener.MouseListener;
+import ending.input.MouseListener;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RectangleShape;

@@ -49,4 +49,9 @@ public class TileTextures {
      * The texture of the Down Stairs tile.
      */
     public static final Texture DOWNSTAIRSTEXTURE = loadTexture("sprites/tiles/downstairs.png");
+    
+    /**
+     * The texture of the Player.
+     */
+    public static final Texture PLAYERTEXTURE = loadTexture("sprites/tiles/player.png");
 }

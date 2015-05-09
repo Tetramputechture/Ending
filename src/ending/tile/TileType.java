@@ -49,5 +49,7 @@ public enum TileType {
     /**
      * The Down Stairs Tile.
      */
-    DOWNSTAIRS
+    DOWNSTAIRS,
+    
+    PLAYER
 }

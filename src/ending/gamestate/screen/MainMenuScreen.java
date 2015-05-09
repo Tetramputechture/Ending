@@ -5,7 +5,7 @@ import ending.util.TextUtils;
 import ending.util.TextureUtils;
 import ending.widget.Button;
 import ending.widget.Widget;
-import ending.widget.widgetlistener.ButtonAdapter;
+import ending.input.ButtonAdapter;
 import ending.window.WindowConfig;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderStates;

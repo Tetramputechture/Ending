@@ -4,7 +4,10 @@ import ending.gamestate.State;
 import ending.gamestate.screen.ScreenType;
 import ending.input.InputHandler;
 import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.View;
+import org.jsfml.window.ContextSettings;
 import org.jsfml.window.VideoMode;
+import org.jsfml.window.WindowStyle;
 
 /**
  *
@@ -21,12 +24,15 @@ public class Window {
      * @param title
      */
     public Window(String title) {
-        rw = new RenderWindow();
-        rw.create(new VideoMode(WindowConfig.WINDOW_WIDTH, WindowConfig.WINDOW_HEIGHT), title);
+        rw = new RenderWindow(new VideoMode(WindowConfig.WINDOW_WIDTH, WindowConfig.WINDOW_HEIGHT), title, WindowStyle.DEFAULT, new ContextSettings(2));
         
         input = new InputHandler();
         
         State.setCurrentScreen(ScreenType.MAIN_MENU);
+    }
+    
+    public void setView(View view) {
+        rw.setView(view);
     }
     
     /**

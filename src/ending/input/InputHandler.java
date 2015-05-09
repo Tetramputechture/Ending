@@ -25,6 +25,7 @@ public class InputHandler {
         for (Event event : rw.pollEvents()) {
             switch (event.type) {
                 case CLOSED:
+                    System.out.println("!");
                     rw.close();
                     break;
                 case KEY_PRESSED:

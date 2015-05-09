@@ -1,5 +1,6 @@
 package ending.dungeon;
 
+import ending.actor.Player;
 import ending.tile.TileType;
 import ending.tile.Tile;
 import ending.vector.Vector2i;
@@ -18,6 +19,8 @@ public class Dungeon implements Drawable {
     private final Vector2i size;
 
     private final Tile[][] tileData;
+    
+    private Player player;
 
     /**
      * Constructs a new Dungeon, with all tiles initially set to
@@ -34,6 +37,14 @@ public class Dungeon implements Drawable {
                 tileData[i][j] = Tile.getTileFromTileType(TileType.UNUSED);
             }
         }
+    }
+    
+    public void setPlayer(Player p) {
+        player = p;
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 
     /**

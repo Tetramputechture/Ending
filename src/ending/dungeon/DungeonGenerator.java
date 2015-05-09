@@ -1,5 +1,6 @@
 package ending.dungeon;
 
+import ending.actor.Player;
 import ending.tile.Tile;
 import ending.tile.TileType;
 import ending.tile.door.DoorTile;
@@ -135,13 +136,8 @@ public class DungeonGenerator {
         }
 
         dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
-        
-        StoneFloorTile floorAndDoor = new StoneFloorTile();
-        DoorTile door = new DoorTile(doorX * Tile.TILE_WIDTH, doorY * Tile.TILE_HEIGHT, direction);
-        if (checkDoor(dungeon, doorX, doorY, direction)) {
-            floorAndDoor.pushTile(door);
-        }
-        dungeon.setCell(doorX, doorY, floorAndDoor);
+
+        makeDoor(dungeon, doorX, doorY, direction);
 
         return true;
     }
@@ -206,21 +202,23 @@ public class DungeonGenerator {
 
         if (chance <= chanceRoom) {
             if (makeRoom(dungeon, rand, x + xmod, y + ymod, direction)) {
-                
-                StoneFloorTile floorAndDoor = new StoneFloorTile();
-                DoorTile door = new DoorTile(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT, direction);
-                if (checkDoor(dungeon, x, y, direction)) {
-                    floorAndDoor.pushTile(door);
-                }
-                dungeon.setCell(x, y, floorAndDoor);
+                makeDoor(dungeon, x, y, direction);
                 dungeon.setCell(x + xmod, y + ymod, TileType.STONEFLOOR);
-                
                 return true;
             }
             return false;
         } else {
             return makeCorridor(dungeon, rand, x + xmod, y + ymod, x, y, direction);
         }
+    }
+
+    private void makeDoor(Dungeon dungeon, int x, int y, Direction direction) {
+        StoneFloorTile floorAndDoor = new StoneFloorTile();
+        DoorTile door = new DoorTile(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT, direction);
+        if (checkDoor(dungeon, x, y, direction)) {
+            floorAndDoor.pushTile(door);
+        }
+        dungeon.setCell(x, y, floorAndDoor);
     }
 
     private boolean checkDoor(Dungeon dungeon, int x, int y, Direction direction) {
@@ -283,7 +281,31 @@ public class DungeonGenerator {
         return false;
     }
 
-    private boolean makeSpecialTile(Dungeon dungeon, Random rand, TileType tileType) {
+    private boolean makeStairs(Dungeon dungeon, Random rand, TileType tileType) {
+        int maxTries = 10000;
+
+        for (int tries = 0; tries < maxTries; tries++) {
+            int x = randInt(rand, 1, size.x - 2);
+            int y = randInt(rand, 1, size.y - 2);
+
+            if (!(dungeon.isAdjacent(x, y, TileType.STONEFLOOR)
+                    || dungeon.isAdjacent(x, y, TileType.STONECORRIDOR)
+                    || dungeon.isAdjacent(x, y, TileType.STONEWALL))) {
+                continue;
+            }
+
+            if (dungeon.isAdjacent(x, y, TileType.DOOR)) {
+                continue;
+            }
+
+            dungeon.setCell(x, y, tileType);
+
+            return true;
+        }
+        return false;
+    }
+
+    private boolean makePlayer(Dungeon dungeon, Random rand) {
         int maxTries = 10000;
 
         for (int tries = 0; tries < maxTries; tries++) {
@@ -298,7 +320,13 @@ public class DungeonGenerator {
                 continue;
             }
 
-            dungeon.setCell(x, y, tileType);
+            Player p = new Player();
+            dungeon.setPlayer(p);
+
+            StoneFloorTile sft = new StoneFloorTile();
+            sft.pushTile(p);
+            dungeon.setCell(x, y, sft);
+            dungeon.setCell(x, y + 1, TileType.STONEFLOOR);
 
             return true;
         }
@@ -326,13 +354,15 @@ public class DungeonGenerator {
             }
         }
 
-        if (!makeSpecialTile(dungeon, rand, TileType.UPSTAIRS)) {
+        if (!makeStairs(dungeon, rand, TileType.UPSTAIRS)) {
             System.out.println("Unable to place up stairs.");
         }
 
-        if (!makeSpecialTile(dungeon, rand, TileType.DOWNSTAIRS)) {
+        if (!makeStairs(dungeon, rand, TileType.DOWNSTAIRS)) {
             System.out.println("Unable to place down stairs");
         }
+
+        makePlayer(dungeon, rand);
 
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
