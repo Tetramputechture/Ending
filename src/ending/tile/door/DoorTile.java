@@ -4,6 +4,7 @@ import ending.dungeon.Direction;
 import ending.tile.Tile;
 import ending.tile.TileTextures;
 import ending.tile.TileType;
+import org.jsfml.system.Time;
 
 /**
  * The Door Tile.
@@ -13,20 +14,20 @@ public class DoorTile extends Tile {
     
     /**
      * Initializes the Sprite of this Tile, and sets its Passable field to false.
-     * Position must be specified at construction to properly rotate the door.
-     * @param x the x coordinate of the door
-     * @param y the y coordinate of the door
-     * @param direction the direction of the area the door is placed in
      */
-    public DoorTile(int x, int y, Direction direction) {
+    public DoorTile() {
         super();
         setPassable(false);
         sprite.setTexture(TileTextures.DOORTEXTURE);
-        sprite.setPosition(x, y);
-        rotateBasedOnDirection(direction);
     }
 
-    private void rotateBasedOnDirection(Direction direction) {
+    /**
+     * Sets the rotation of this door relative to a Direction.
+     * POSITION OF THIS DOOR MUST BE SET IN ORDER FOR THIS FUNCTION TO 
+     * WORK PROPERLY.
+     * @param direction the direction in which to rotate this door.
+     */
+    public void rotateBasedOnDirection(Direction direction) {
         switch (direction) {
             // door sprite is already aligned with North direction
             case EAST:

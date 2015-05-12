@@ -1,7 +1,6 @@
 package ending.tile;
 
 import ending.actor.Player;
-import ending.dungeon.Direction;
 import ending.tile.corridor.StoneCorridorTile;
 import ending.tile.door.DoorTile;
 import ending.tile.floor.DirtFloorTile;
@@ -17,6 +16,7 @@ import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Transform;
+import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 
 /**
@@ -52,21 +52,6 @@ public abstract class Tile implements Drawable {
      */
     public Tile() {
         sprite = new Sprite();
-        sprite.setPosition(0, 0);
-        transform = new Transform();
-        children = new Stack<>();
-        passable = false;
-    }
-    
-    /**
-     * Initializes the Sprite and children of this Tile, 
-     * and sets its Passable field to false.
-     * @param x the x position of the Tile.
-     * @param y the y position of the Tile.
-     */
-    public Tile(int x, int y) {
-        sprite = new Sprite();
-        sprite.setPosition(x, y);
         transform = new Transform();
         children = new Stack<>();
         passable = false;
@@ -94,7 +79,7 @@ public abstract class Tile implements Drawable {
             case STONECORRIDOR:
                 return new StoneCorridorTile();
             case DOOR:
-                return new DoorTile(0, 0, Direction.NORTH);
+                return new DoorTile();
             case DIRTWALL:
                 return new DirtWallTile();
             case STONEWALL:
@@ -103,8 +88,6 @@ public abstract class Tile implements Drawable {
                 return new DownStairsTile();
             case UPSTAIRS:
                 return new UpStairsTile();
-            case PLAYER:
-                return new Player();
             default:
                 return null;
         }

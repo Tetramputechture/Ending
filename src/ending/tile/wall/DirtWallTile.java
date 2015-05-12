@@ -2,6 +2,7 @@ package ending.tile.wall;
 
 import ending.tile.TileTextures;
 import ending.tile.TileType;
+import org.jsfml.system.Time;
 
 /**
  * The Dirt Wall tile.

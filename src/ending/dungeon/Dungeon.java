@@ -1,5 +1,6 @@
 package ending.dungeon;
 
+import ending.actor.Actor;
 import ending.actor.Player;
 import ending.tile.TileType;
 import ending.tile.Tile;
@@ -7,6 +8,7 @@ import ending.vector.Vector2i;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
+import org.jsfml.system.Time;
 
 /**
  * Holds all tile data within a map, and stores utility functions for the
@@ -20,7 +22,7 @@ public class Dungeon implements Drawable {
 
     private final Tile[][] tileData;
     
-    private Player player;
+    private final Actor[][] actorData;
 
     /**
      * Constructs a new Dungeon, with all tiles initially set to
@@ -37,14 +39,7 @@ public class Dungeon implements Drawable {
                 tileData[i][j] = Tile.getTileFromTileType(TileType.UNUSED);
             }
         }
-    }
-    
-    public void setPlayer(Player p) {
-        player = p;
-    }
-    
-    public Player getPlayer() {
-        return player;
+        actorData = new Actor[size.x][size.y];
     }
 
     /**
@@ -242,14 +237,39 @@ public class Dungeon implements Drawable {
         return holdsType(x - 1, y, tileType) || holdsType(x + 1, y, tileType)
                 || holdsType(x, y - 1, tileType) || holdsType(x, y + 1, tileType);
     }
+    
+    public void addActor(int x, int y, Actor a) {
+        a.setPosition(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT);
+        
+        actorData[x][y] = a;
+    }
 
-    @Override
-    public void draw(RenderTarget rt, RenderStates states) {
+    public void updateActors(Time deltaTime) {
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
-                Tile tile = tileData[x][y];
-                //tile.setPosition(x*Tile.TILE_WIDTH, y*Tile.TILE_HEIGHT);
-                rt.draw(tile);
+                Actor a = actorData[x][y];
+                if (a != null) {
+                    a.update(deltaTime);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public void draw(RenderTarget rt, RenderStates states) {
+        // draw static tiles
+        for (int y = 0; y < size.y; y++) {
+            for (int x = 0; x < size.x; x++) {
+                rt.draw(tileData[x][y]);
+            }
+        }
+        // draw actors
+        for (int y = 0; y < size.y; y++) {
+            for (int x = 0; x < size.x; x++) {
+                Actor a = actorData[x][y];
+                if (a != null) {
+                    rt.draw(actorData[x][y]);
+                }
             }
         }
     }

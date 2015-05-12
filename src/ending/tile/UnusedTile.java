@@ -1,5 +1,7 @@
 package ending.tile;
 
+import org.jsfml.system.Time;
+
 /**
  * The Unused Tile. Used in Dungeon generation.
  * @author Nick

@@ -2,6 +2,7 @@ package ending.tile.wall;
 
 import ending.tile.TileTextures;
 import ending.tile.TileType;
+import org.jsfml.system.Time;
 
 /**
  *
@@ -23,5 +24,5 @@ public class StoneWallTile extends WallTile {
     public TileType getType() {
         return TileType.STONEWALL;
     }
-    
+
 }

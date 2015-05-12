@@ -15,7 +15,7 @@ public class UpStairsTile extends Tile {
      */
     public UpStairsTile() {
         super();
-        setPassable(true);
+        setPassable(false);
         sprite.setTexture(TileTextures.UPSTAIRSTEXTURE);
     }
     
@@ -25,5 +25,5 @@ public class UpStairsTile extends Tile {
     public TileType getType() {
         return TileType.UPSTAIRS;
     }
-    
+
 }

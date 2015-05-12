@@ -10,17 +10,12 @@ public class Vector2f {
     /**
      * The x value of this Vector2f.
      */
-    public final float x;
+    public float x;
 
     /**
      * The y value of this Vector2f.
      */
-    public final float y;
-
-    /**
-     * The Zero Vector2f, defined as (0, 0).
-     */
-    public static final Vector2f ZERO = new Vector2f(0, 0);
+    public float y;
     
     /**
      * Constructs a new Vector2f, with both x and y set to 0.
@@ -155,7 +150,7 @@ public class Vector2f {
      */
     public Vector2f div(float divisor) {
         if (divisor == 0) {
-            return ZERO;
+            return new Vector2f(0, 0);
         }
         return scl(1 / divisor);
     }
@@ -285,7 +280,7 @@ public class Vector2f {
      * <code>false</code> otherwise.
      */
     public boolean isZero() {
-        return epsilonEquals(ZERO, 0.00000001f);
+        return epsilonEquals(new Vector2f(0, 0), 0.00000001f);
     }
 
     @Override
