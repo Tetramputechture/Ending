@@ -1,7 +1,6 @@
 package ending.dungeon;
 
 import ending.actor.Actor;
-import ending.actor.Player;
 import ending.tile.TileType;
 import ending.tile.Tile;
 import ending.vector.Vector2i;
@@ -244,12 +243,12 @@ public class Dungeon implements Drawable {
         actorData[x][y] = a;
     }
 
-    public void updateActors(Time deltaTime) {
+    public void updateActors(Time deltaTime, RenderTarget rt) {
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 Actor a = actorData[x][y];
                 if (a != null) {
-                    a.update(deltaTime);
+                    a.update(deltaTime, rt);
                 }
             }
         }
@@ -257,19 +256,9 @@ public class Dungeon implements Drawable {
     
     @Override
     public void draw(RenderTarget rt, RenderStates states) {
-        // draw static tiles
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 rt.draw(tileData[x][y]);
-            }
-        }
-        // draw actors
-        for (int y = 0; y < size.y; y++) {
-            for (int x = 0; x < size.x; x++) {
-                Actor a = actorData[x][y];
-                if (a != null) {
-                    rt.draw(actorData[x][y]);
-                }
             }
         }
     }

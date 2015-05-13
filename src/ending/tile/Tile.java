@@ -1,6 +1,5 @@
 package ending.tile;
 
-import ending.actor.Player;
 import ending.tile.corridor.StoneCorridorTile;
 import ending.tile.door.DoorTile;
 import ending.tile.floor.DirtFloorTile;
@@ -16,7 +15,6 @@ import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Transform;
-import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 
 /**

@@ -1,6 +1,5 @@
 package ending.dungeon;
 
-import ending.actor.Player;
 import ending.tile.Tile;
 import ending.tile.TileType;
 import ending.tile.door.DoorTile;

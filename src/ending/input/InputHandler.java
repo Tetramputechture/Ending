@@ -5,6 +5,7 @@ import org.jsfml.graphics.RenderWindow;
 import ending.vector.Vector2i;
 import ending.widget.Button;
 import ending.widget.Widget;
+import java.util.ArrayList;
 import org.jsfml.window.Mouse;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
@@ -16,6 +17,12 @@ import org.jsfml.window.event.MouseEvent;
  * @author Nick
  */
 public class InputHandler {
+    
+    private final ArrayList<KeyListener> keyListeners;
+    
+    public InputHandler() {
+        keyListeners = new ArrayList<>();
+    }
 
     /**
      * Handles the input of a RenderWindow.
@@ -40,9 +47,13 @@ public class InputHandler {
             }
         }
     }
+    
+    public void addKeyListener(KeyListener k) {
+        keyListeners.add(k);
+    }
 
     private void handleKeyPress(KeyEvent keyEvent) {
-        for (KeyListener k : State.getCurrentScreen().getKeyListeners()) {
+        for (KeyListener k : keyListeners) {
             k.keyPressed(keyEvent);
         }
     }

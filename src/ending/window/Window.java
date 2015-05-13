@@ -18,26 +18,25 @@ public class Window {
     private final RenderWindow rw;
     
     private final InputHandler input;
-    
-    /**
-     *
-     * @param title
-     */
+
     public Window(String title) {
         rw = new RenderWindow(new VideoMode(WindowConfig.WINDOW_WIDTH, WindowConfig.WINDOW_HEIGHT), title, WindowStyle.DEFAULT, new ContextSettings(2));
         
         input = new InputHandler();
         
+        State.setCurrentWindow(this);
         State.setCurrentScreen(ScreenType.MAIN_MENU);
+        State.setInputHandler(input);
     }
     
     public void setView(View view) {
         rw.setView(view);
     }
     
-    /**
-     *
-     */
+    public RenderWindow getRenderWindow() {
+        return rw;
+    }
+    
     public void display() {
         while (rw.isOpen()) {
             input.handleInput(rw);
