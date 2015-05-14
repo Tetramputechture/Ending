@@ -1,6 +1,7 @@
 package ending.component;
 
-import ending.actor.Actor;
+import ending.dungeon.Dungeon;
+import ending.entity.Entity;
 import org.jsfml.system.Time;
 
 /**
@@ -9,6 +10,6 @@ import org.jsfml.system.Time;
  */
 public interface PhysicsComponent {
     
-    public void update(Actor a, Time deltaTime);
+    public void update(Entity a, Time deltaTime, Dungeon dungeon);
     
 }

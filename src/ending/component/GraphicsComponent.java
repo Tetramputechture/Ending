@@ -1,6 +1,6 @@
 package ending.component;
 
-import ending.actor.Actor;
+import ending.entity.Entity;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.system.Time;
 
@@ -10,6 +10,6 @@ import org.jsfml.system.Time;
  */
 public interface GraphicsComponent {
     
-    public void update(Actor a, RenderTarget rt, Time deltaTime);
+    public void update(Entity a, RenderTarget rt, Time deltaTime);
     
 }

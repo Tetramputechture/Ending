@@ -1,6 +1,6 @@
 package ending.dungeon;
 
-import ending.actor.Actor;
+import ending.entity.Entity;
 import ending.tile.TileType;
 import ending.tile.Tile;
 import ending.vector.Vector2i;
@@ -21,7 +21,7 @@ public class Dungeon implements Drawable {
 
     private final Tile[][] tileData;
     
-    private final Actor[][] actorData;
+    private final Entity[][] entityData;
 
     /**
      * Constructs a new Dungeon, with all tiles initially set to
@@ -38,7 +38,11 @@ public class Dungeon implements Drawable {
                 tileData[i][j] = Tile.getTileFromTileType(TileType.UNUSED);
             }
         }
-        actorData = new Actor[size.x][size.y];
+        entityData = new Entity[size.x][size.y];
+    }
+    
+    public Tile[][] getTiles() {
+        return tileData;
     }
 
     /**
@@ -237,18 +241,17 @@ public class Dungeon implements Drawable {
                 || holdsType(x, y - 1, tileType) || holdsType(x, y + 1, tileType);
     }
     
-    public void addActor(int x, int y, Actor a) {
+    public void addEntity(int x, int y, Entity a) {
         a.setPosition(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT);
         
-        actorData[x][y] = a;
+        entityData[x][y] = a;
     }
 
-    public void updateActors(Time deltaTime, RenderTarget rt) {
+    public void updateEntities(Time deltaTime, RenderTarget rt) {
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
-                Actor a = actorData[x][y];
-                if (a != null) {
-                    a.update(deltaTime, rt);
+                if (entityData[x][y] != null) {
+                    entityData[x][y].update(deltaTime, rt, this);
                 }
             }
         }

@@ -1,6 +1,6 @@
 package ending.game;
 
-import ending.actor.Actor;
+import ending.entity.Entity;
 import ending.dungeon.Dungeon;
 import ending.dungeon.DungeonGenerator;
 import org.jsfml.graphics.Drawable;
@@ -22,7 +22,7 @@ public class Game implements Drawable {
     
     private final View view;
     
-    private final Actor player;
+    private final Entity player;
     
     private final Clock frameClock;
     
@@ -36,8 +36,8 @@ public class Game implements Drawable {
         dungeon = dg.generate(40, 30);
         view = new View();
         view.setSize(320, 240);
-        player = Actor.createPlayer();
-        dungeon.addActor(20, 15, player);
+        player = Entity.createPlayer();
+        dungeon.addEntity(20, 15, player);
         frameClock = new Clock();
     }
     
@@ -47,18 +47,18 @@ public class Game implements Drawable {
     
     public void generateNewDungeon() {
         dungeon = dg.generate(40, 30, System.currentTimeMillis());
+        dungeon.addEntity(20, 15, player);
     }
     
     public void update() {
         view.setCenter(player.getPosition());
-        
         deltaTime = frameClock.restart();
     }
 
     @Override
     public void draw(RenderTarget rt, RenderStates states) {
         rt.draw(dungeon);
-        dungeon.updateActors(deltaTime, rt);
+        dungeon.updateEntities(deltaTime, rt);
     }
     
     

@@ -3,6 +3,7 @@ package ending.animation;
 import org.jsfml.graphics.BasicTransformable;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.FloatRect;
+import org.jsfml.graphics.Image;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.PrimitiveType;
 import org.jsfml.graphics.RenderStates;
@@ -10,7 +11,6 @@ import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.Transform;
 import org.jsfml.graphics.Vertex;
-import org.jsfml.graphics.VertexArray;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 
@@ -38,6 +38,17 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
     private Texture texture;
 
     private final Vertex[] vertices;
+    
+    private int minX, maxX, minY, maxY;
+    private int height;
+
+    public int getMinX() {
+        return minX;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
 
     public AnimatedSprite(Time frameTime, boolean paused, boolean looped) {
         this.frameTime = frameTime;
@@ -89,10 +100,39 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
     public FloatRect getLocalBounds() {
         IntRect rect = animation.getFrame(currentFrame);
 
-        float width = Math.abs(rect.width);
-        float height = Math.abs(rect.height);
+        float width = Math.abs(rect.width) + rect.left;
+        height = Math.abs(rect.height) + rect.top;
+        
+        minX = Integer.MAX_VALUE;
+        maxX = 0;
+        minY = Integer.MAX_VALUE;
+        maxY = 0;
+        
+        Image img = texture.copyToImage();
+        
+        for (int x = rect.left; x < width; x++) {
+            for (int y = rect.top; y < height; y++) {
+                if (img.getPixel(x, y).a != 0) {
+                    if (x < minX) {
+                        minX = x - rect.left;
+                    } else if (x > maxX) {
+                        maxX = x - rect.left;
+                    }
+                    if (y < minY) {
+                        minY = y;
+                    } else if (y > maxY) {
+                        maxY = y;
+                    }
+                }
+            }
+        }
+        
+                
+        System.out.println("Top point:" + rect.top);
+        System.out.println("Min Y value: " + minY);
+        System.out.println("Max Y value: " + maxY);
 
-        return new FloatRect(0, 0, width, height);
+        return new FloatRect(0, 0, maxX - minX + 1, maxY - minY + 1);
     }
 
     public FloatRect getGlobalBounds() {

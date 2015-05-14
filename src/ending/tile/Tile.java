@@ -11,6 +11,7 @@ import ending.tile.wall.StoneWallTile;
 import ending.util.SpriteUtils;
 import java.util.Stack;
 import org.jsfml.graphics.Drawable;
+import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
@@ -113,6 +114,10 @@ public abstract class Tile implements Drawable {
     
     public float getRotation() {
         return sprite.getRotation();
+    }
+    
+    public FloatRect getGlobalBounds() {
+        return sprite.getGlobalBounds();
     }
     
     public void rotateAroundCenter(float degrees) {

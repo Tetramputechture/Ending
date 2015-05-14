@@ -21,12 +21,17 @@ public class Animation {
         texture = new Texture();
     }
     
+    public Animation(Texture spriteSheet) {
+        this();
+        this.texture = spriteSheet;
+    }
+    
     public void addFrame(IntRect rect) {
         frames.add(rect);
     }
     
-    public void setSpriteSheet(Texture texture) {
-        this.texture = texture;
+    public void setSpriteSheet(Texture spriteSheet) {
+        this.texture = spriteSheet;
     }
     
     public Texture getSpriteSheet() {

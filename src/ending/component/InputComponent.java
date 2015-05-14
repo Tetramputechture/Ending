@@ -1,6 +1,6 @@
 package ending.component;
 
-import ending.actor.Actor;
+import ending.entity.Entity;
 
 /**
  *
@@ -8,6 +8,6 @@ import ending.actor.Actor;
  */
 public interface InputComponent {
     
-    public void update(Actor a);
+    public void update(Entity a);
     
 }
