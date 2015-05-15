@@ -1,5 +1,6 @@
 package ending.widget;
 
+import ending.input.InputHandler;
 import ending.input.MouseListener;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
@@ -8,6 +9,8 @@ import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Text;
 import ending.vector.Vector2f;
+import ending.vector.Vector2i;
+import org.jsfml.window.Mouse;
 
 /**
  * A Widget that has a Label and a Frame, surrounding the Label.
@@ -25,10 +28,7 @@ public class Button extends Widget {
      * The Frame of this Button.
      */
     private final Frame frame;
-
-    /**
-     * The MouseListener of this Button. Can be null.
-     */
+    
     private MouseListener mouseListener;
 
     /**
@@ -44,9 +44,25 @@ public class Button extends Widget {
     }
 
     @Override
-    public void draw(RenderTarget rt, RenderStates states) {
+    public void draw(RenderTarget rt, RenderStates states) {   
+        if (mouseListener != null) {
+            Vector2i pos = InputHandler.getMousePosition();
+            if (pos != null && frame.contains(InputHandler.getMousePosition())) {
+                mouseListener.mouseEntered();
+                if (InputHandler.isMouseButtonPressed(Mouse.Button.LEFT)) {
+                    mouseListener.mouseClicked();
+                }
+            } else {
+                mouseListener.mouseExited();
+            }
+        }
+        
         rt.draw(label);
         rt.draw(frame);
+    }
+    
+    public void addMouseListener(MouseListener l) {
+        mouseListener = l;
     }
 
     private void updateFrame() {
@@ -94,49 +110,5 @@ public class Button extends Widget {
      */
     public Frame getFrame() {
         return frame;
-    }
-
-    /**
-     * Adds a MouseListener to this Label.
-     *
-     * @param mouseListener the mouseListener to add.
-     */
-    public void addMouseListener(MouseListener mouseListener) {
-        this.mouseListener = mouseListener;
-    }
-
-    /**
-     * Removes this Label's mouseListener.
-     */
-    public void removeMouseListener() {
-        mouseListener = null;
-    }
-
-    /**
-     * Notifies this Label's mouseListener that this Label has been clicked.
-     */
-    public void setClicked() {
-        mouseListener.mouseClicked(this);
-    }
-
-    /**
-     * Notifies this Label's mouseListener that this Label has been released.
-     */
-    public void setReleased() {
-        mouseListener.mouseReleased(this);
-    }
-
-    /**
-     * Notifies this Label's mouseListener that this Label has been entered.
-     */
-    public void setEntered() {
-        mouseListener.mouseEntered(this);
-    }
-
-    /**
-     * Notifies this Label's mouseListener that this Label has been exited.
-     */
-    public void setExited() {
-        mouseListener.mouseExited(this);
     }
 }

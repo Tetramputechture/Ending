@@ -12,6 +12,8 @@ import org.jsfml.graphics.Color;
  * @author Nick
  */
 public class ButtonAdapter extends MouseAdapter {
+    
+    private final Button button;
 
     private final Action clickAction;
     private final String soundFileName;
@@ -24,6 +26,7 @@ public class ButtonAdapter extends MouseAdapter {
     /**
      * Constructs a new CButtonAdapater.
      *
+     * @param button the Button to respond to this Listener.
      * @param clickAction the Action to perform on click.
      * @param soundFileName the Sound to play when the mouse enters the label.
      * Null for no sound.
@@ -32,10 +35,13 @@ public class ButtonAdapter extends MouseAdapter {
      * @param exitColor the Color for the button to change when the mouse exits
      * the Label. Null for no color change.
      */
-    public ButtonAdapter(Action clickAction,
+    public ButtonAdapter(Button button,
+            Action clickAction,
             String soundFileName,
             Color entranceColor,
             Color exitColor) {
+        
+        this.button = button;
         this.clickAction = clickAction;
         this.soundFileName = soundFileName;
         this.entranceColor = entranceColor;
@@ -43,25 +49,25 @@ public class ButtonAdapter extends MouseAdapter {
     }
 
     @Override
-    public void mouseClicked(Button b) {
+    public void mouseClicked() {
         clickAction.execute();
     }
 
     @Override
-    public void mouseEntered(Button b) {
+    public void mouseEntered() {
         if (shouldPlaySound && soundFileName != null) {
             new AudioHandler().playSound(soundFileName, 1f);
         }
         shouldPlaySound = false;
         if (entranceColor != null) {
-            b.getLabel().setColor(entranceColor);
+            button.getLabel().setColor(entranceColor);
         }
     }
 
     @Override
-    public void mouseExited(Button b) {
+    public void mouseExited() {
         if (exitColor != null) {
-            b.getLabel().setColor(exitColor);
+            button.getLabel().setColor(exitColor);
         }
         shouldPlaySound = true;
     }

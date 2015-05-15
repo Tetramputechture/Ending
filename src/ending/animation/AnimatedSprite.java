@@ -1,5 +1,6 @@
 package ending.animation;
 
+import java.util.ArrayList;
 import org.jsfml.graphics.BasicTransformable;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.FloatRect;
@@ -63,6 +64,7 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
         currentFrame = 0;
         setFrame(currentFrame, true);
     }
+    
 
     public void setFrameTime(Time time) {
         this.frameTime = time;
@@ -98,45 +100,18 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
     }
 
     public FloatRect getLocalBounds() {
-        IntRect rect = animation.getFrame(currentFrame);
-
-        float width = Math.abs(rect.width) + rect.left;
-        height = Math.abs(rect.height) + rect.top;
-        
-        minX = Integer.MAX_VALUE;
-        maxX = 0;
-        minY = Integer.MAX_VALUE;
-        maxY = 0;
-        
-        Image img = texture.copyToImage();
-        
-        for (int x = rect.left; x < width; x++) {
-            for (int y = rect.top; y < height; y++) {
-                if (img.getPixel(x, y).a != 0) {
-                    if (x < minX) {
-                        minX = x - rect.left;
-                    } else if (x > maxX) {
-                        maxX = x - rect.left;
-                    }
-                    if (y < minY) {
-                        minY = y;
-                    } else if (y > maxY) {
-                        maxY = y;
-                    }
-                }
-            }
-        }
-        
-                
-        System.out.println("Top point:" + rect.top);
-        System.out.println("Min Y value: " + minY);
-        System.out.println("Max Y value: " + maxY);
-
-        return new FloatRect(0, 0, maxX - minX + 1, maxY - minY + 1);
+        return new FloatRect(animation.getFrameBounds(currentFrame));
     }
 
     public FloatRect getGlobalBounds() {
         return getTransform().transformRect(getLocalBounds());
+    }
+    
+    @Override
+    public Vector2f getPosition() {
+        Vector2f superPos = super.getPosition();
+        IntRect bounds = animation.getFrameBounds(currentFrame);
+        return new Vector2f(bounds.left + superPos.x, bounds.top + superPos.y);
     }
 
     public boolean isLooped() {

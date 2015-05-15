@@ -1,11 +1,13 @@
 package ending.gamestate.screen;
 
+import ending.input.InputHandler;
 import ending.input.KeyListener;
 import ending.widget.Widget;
 import java.util.ArrayList;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
+import org.jsfml.window.Keyboard;
 
 /**
  * A displayable Screen.
@@ -19,28 +21,15 @@ public abstract class Screen implements Drawable {
     protected final ArrayList<Widget> widgets;
     
     /**
-     * The KeyListeners that are listening to this Screen.
+     * The KeyListeners listening to this Screen.
      */
-    protected final ArrayList<KeyListener> keyListeners;
-    
+    private KeyListener keyListener;
+
     /**
      * Initializes this Screen's list of Widgets. 
      */
     public Screen() {
         widgets = new ArrayList<>();
-        keyListeners = new ArrayList<>();
-    }
-    
-    public void addKeyListener(KeyListener keyListener) {
-        if (!keyListeners.contains(keyListener)) {
-            keyListeners.add(keyListener);
-        }
-    }
-    
-    public void detachKeyListener(KeyListener keyListener) {
-        if (keyListeners.contains(keyListener)) {
-            keyListeners.remove(keyListener);
-        }
     }
     
     /**
@@ -59,6 +48,14 @@ public abstract class Screen implements Drawable {
         }
     }
     
+    public void addKeyListener(KeyListener k) {
+        keyListener = k;
+    }
+    
+    public KeyListener getKeyListener() {
+        return keyListener;
+    }
+    
     /**
      * @return the List of Widgets this Screen holds.
      */
@@ -66,14 +63,8 @@ public abstract class Screen implements Drawable {
         return widgets;
     }
     
-    /**
-     * @return the List of KeyListeners this Screen holds.
-     */
-    public ArrayList<KeyListener> getKeyListeners() {
-        return keyListeners;
-    }
-    
     @Override
     public abstract void draw(RenderTarget rt, RenderStates states);
+    
     
 }

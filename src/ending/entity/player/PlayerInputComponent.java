@@ -2,8 +2,10 @@ package ending.entity.player;
 
 import ending.entity.Entity;
 import ending.component.InputComponent;
+import ending.input.InputHandler;
 import ending.vector.Vector2f;
 import org.jsfml.window.Keyboard;
+import org.jsfml.window.Mouse;
 
 /**
  *
@@ -17,16 +19,16 @@ public class PlayerInputComponent implements InputComponent {
     public void update(Entity a) {
         Vector2f velocity = a.getVelocity();
         
-        if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
+        if (InputHandler.isKeyPressed(Keyboard.Key.S)) {
             velocity.y += speed;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
+        if (InputHandler.isKeyPressed(Keyboard.Key.A)) {
             velocity.x -= speed;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
+        if (InputHandler.isKeyPressed(Keyboard.Key.D)) {
             velocity.x += speed;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
+        if (InputHandler.isKeyPressed(Keyboard.Key.W)) {
             velocity.y -= speed;
         }
     }

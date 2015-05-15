@@ -14,9 +14,6 @@ import org.jsfml.system.Time;
 public class EntityPhysicsComponent implements PhysicsComponent {
 
     private static final double SQRT2 = Math.sqrt(2);
-    
-    private final int width = 32;
-    private final int height = 32;
 
     @Override
     public void update(Entity a, Time deltaTime, Dungeon dungeon) {
@@ -39,7 +36,6 @@ public class EntityPhysicsComponent implements PhysicsComponent {
                 if (!t.isPassable()) {
                     FloatRect intersection = a.getBoundingRect().intersection(t.getGlobalBounds());
                     if (intersection != null) {
-                        //System.out.println("intersection");
                     }
                 }
             }

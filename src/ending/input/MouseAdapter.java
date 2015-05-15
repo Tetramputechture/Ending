@@ -1,7 +1,5 @@
 package ending.input;
 
-import ending.widget.Button;
-
 /**
  * A convenience class that defaults all methods of MouseListener to do nothing.
  *
@@ -10,19 +8,20 @@ import ending.widget.Button;
 public abstract class MouseAdapter implements MouseListener {
 
     @Override
-    public void mouseClicked(Button b) {
+    public void mouseClicked() {
+    }
+
+    
+    @Override
+    public void mouseMoved() {
     }
 
     @Override
-    public void mouseReleased(Button b) {
+    public void mouseEntered() {
     }
 
     @Override
-    public void mouseEntered(Button b) {
-    }
-
-    @Override
-    public void mouseExited(Button b) {
+    public void mouseExited() {
     }
 
 }

@@ -37,7 +37,8 @@ public class MainMenuScreen extends Screen {
         enterGameText.setPosition(120, WindowConfig.WINDOW_HEIGHT - 200);
 
         Button enterGameButton = new Button(enterGameText);
-        enterGameButton.addMouseListener(new ButtonAdapter(() -> State.setCurrentScreen(ScreenType.GAME),
+        enterGameButton.addMouseListener(new ButtonAdapter(enterGameButton,
+                () -> State.setCurrentScreen(ScreenType.GAME),
                 "sounds/buttonhover.wav",
                 new Color(242, 242, 242),
                 new Color(73, 73, 73)));
@@ -52,7 +53,8 @@ public class MainMenuScreen extends Screen {
         optionsText.setPosition(140, WindowConfig.WINDOW_HEIGHT - 140);
 
         Button optionsButton = new Button(optionsText);
-        optionsButton.addMouseListener(new ButtonAdapter(() -> State.setCurrentScreen(ScreenType.GAME),
+        optionsButton.addMouseListener(new ButtonAdapter(optionsButton,
+                () -> State.setCurrentScreen(ScreenType.GAME),
                 "sounds/buttonhover.wav",
                 new Color(242, 242, 242),
                 new Color(73, 73, 73)));
@@ -67,7 +69,8 @@ public class MainMenuScreen extends Screen {
         exitGameText.setPosition(210, WindowConfig.WINDOW_HEIGHT - 80);
 
         Button exitGameButton = new Button(exitGameText);
-        exitGameButton.addMouseListener(new ButtonAdapter(() -> State.setCurrentScreen(ScreenType.GAME),
+        exitGameButton.addMouseListener(new ButtonAdapter(exitGameButton,
+                () -> State.setCurrentScreen(ScreenType.GAME),
                 "sounds/buttonhover.wav",
                 new Color(242, 242, 242),
                 new Color(73, 73, 73)));

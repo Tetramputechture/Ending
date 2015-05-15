@@ -16,16 +16,6 @@ public class TileTextures {
     public static final Texture UNUSEDTEXTURE = loadTexture("sprites/tiles/unused.png");
 
     /**
-     * The texture of the Dirt Wall tile.
-     */
-    public static final Texture DIRTWALLTEXTURE = loadTexture("sprites/tiles/dirtwall.png");
-
-    /**
-     * The texture of the Dirt Floor tile.
-     */
-    public static final Texture DIRTFLOORTEXTURE = loadTexture("sprites/tiles/dirtfloor.png");
-
-    /**
      * The texture of the Stone Wall tile.
      */
     public static final Texture STONEWALLTEXTURE = loadTexture("sprites/tiles/stonewall.png");
@@ -49,9 +39,4 @@ public class TileTextures {
      * The texture of the Down Stairs tile.
      */
     public static final Texture DOWNSTAIRSTEXTURE = loadTexture("sprites/tiles/downstairs.png");
-    
-    /**
-     * The texture of the Player.
-     */
-    public static final Texture PLAYERTEXTURE = loadTexture("sprites/tiles/player.png");
 }

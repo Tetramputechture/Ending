@@ -38,10 +38,14 @@ public class EntityGraphicsComponent implements GraphicsComponent {
     
     private final int numFrames = 5;
     
-    private RectangleShape outline;
+    private final RectangleShape outline;
     
     public EntityGraphicsComponent(Texture spriteSheet) {
         outline = new RectangleShape();
+        outline.setFillColor(Color.TRANSPARENT);
+        outline.setOutlineColor(Color.WHITE);
+        outline.setOutlineThickness(1);
+        
         sprite = new AnimatedSprite(Time.getSeconds(0.1f), true, false);
         
         south = new Animation(spriteSheet);
@@ -126,23 +130,17 @@ public class EntityGraphicsComponent implements GraphicsComponent {
 
         sprite.update(deltaTime);
         
+        sprite.setPosition(a.getPosition());
+        
+        FloatRect spriteBounds = sprite.getGlobalBounds();
+        
         // update bounding rectangle
-        a.setBoundingRect(new FloatRect(a.getPosition().x, a.getPosition().y, sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
-        outline.setPosition(sprite.getMinX() + a.getPosition().x, sprite.getMinY() + a.getPosition().y);
-        outline.setSize(new org.jsfml.system.Vector2f(a.getBoundingRect().width, a.getBoundingRect().height));
-        outline.setFillColor(Color.TRANSPARENT);
-        outline.setOutlineColor(Color.WHITE);
-        outline.setOutlineThickness(1);
+        a.setBoundingRect(spriteBounds);
         
-        RenderStates rdefault = RenderStates.DEFAULT;
-        RenderStates newStates = new RenderStates(
-            rdefault.blendMode,
-            Transform.combine(rdefault.transform, a.getTransform()),
-            rdefault.texture,
-            rdefault.shader
-            );
+        outline.setPosition(sprite.getPosition());
+        outline.setSize(new Vector2f(spriteBounds.width, spriteBounds.height).toVector2f());
         
-        rt.draw(sprite, newStates);
+        rt.draw(sprite);
         rt.draw(outline);
     }
     

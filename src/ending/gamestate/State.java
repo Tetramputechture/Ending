@@ -3,7 +3,6 @@ package ending.gamestate;
 import ending.gamestate.screen.Screen;
 import ending.gamestate.screen.ScreenType;
 import ending.input.InputHandler;
-import ending.window.Window;
 
 /**
  * Handles all aspects of state.
@@ -11,19 +10,7 @@ import ending.window.Window;
  */
 public final class State {
     
-    private static Window currentWindow;
-    
     private static Screen currentScreen;
-    
-    private static InputHandler input;
-    
-    public static Window getCurrentWindow() {
-        return currentWindow;
-    }
-    
-    public static void setCurrentWindow(Window w) {
-        currentWindow = w;
-    }
     
     /**
      * Gets the current Screen of the State.
@@ -38,7 +25,7 @@ public final class State {
      * @param screenType the type of the Screen to set.
      */
     public static void setCurrentScreen(ScreenType screenType) {
-        currentScreen = Screen.getScreenBasedOnType(screenType);
+        setCurrentScreen(Screen.getScreenBasedOnType(screenType));
     }
     
     /**
@@ -47,13 +34,5 @@ public final class State {
      */
     public static void setCurrentScreen(Screen screen) {
         currentScreen = screen;
-    }
-    
-    public static void setInputHandler(InputHandler ih) {
-        input = ih;
-    }
-    
-    public static InputHandler getInputHandler() {
-        return input;
     }
 }

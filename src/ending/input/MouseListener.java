@@ -1,7 +1,5 @@
 package ending.input;
 
-import ending.widget.Button;
-
 /**
  *
  * @author Nick
@@ -9,31 +7,25 @@ import ending.widget.Button;
 public interface MouseListener extends Listener {
 
     /**
-     * Called when the mouse is clicked on a button's bounding rectangle.
-     *
-     * @param b the button that was clicked.
+     * Called when a mouse button is clicked.
      */
-    void mouseClicked(Button b);
+    void mouseClicked();
+    
+    /**
+     * Called when the mouse is moved.
+     */
+    void mouseMoved();
 
     /**
-     * Called when the mouse is released on a button's bounding rectangle.
-     *
-     * @param b the button that was released.
+     * Called when the mouse enters a widget's bounding rectangle.
+
      */
-    void mouseReleased(Button b);
+    void mouseEntered();
 
     /**
-     * Called when the mouse enters the button's bounding rectangle.
+     * Called when the mouse exits a widget's bounding rectangle.
      *
-     * @param b the button that was entered.
+     * @param m the mouseEvent that occurred.
      */
-    void mouseEntered(Button b);
-
-    /**
-     * Called when the mouse exits the button's bounding rectangle.
-     *
-     * @param b the button that was exited.
-     */
-    void mouseExited(Button b);
-
+    void mouseExited();
 }

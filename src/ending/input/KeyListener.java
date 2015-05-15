@@ -1,6 +1,6 @@
 package ending.input;
 
-import org.jsfml.window.event.KeyEvent;
+import org.jsfml.window.Keyboard;
 
 /**
  * Listens to a Screen 
@@ -8,6 +8,6 @@ import org.jsfml.window.event.KeyEvent;
  */
 public interface KeyListener {
     
-    public void keyPressed(KeyEvent keyEvent);
+    public void keyPressed(Keyboard.Key key);
     
 }

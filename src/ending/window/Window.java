@@ -16,17 +16,11 @@ import org.jsfml.window.WindowStyle;
 public class Window {
     
     private final RenderWindow rw;
-    
-    private final InputHandler input;
 
     public Window(String title) {
         rw = new RenderWindow(new VideoMode(WindowConfig.WINDOW_WIDTH, WindowConfig.WINDOW_HEIGHT), title, WindowStyle.DEFAULT, new ContextSettings(2));
         
-        input = new InputHandler();
-        
-        State.setCurrentWindow(this);
         State.setCurrentScreen(ScreenType.MAIN_MENU);
-        State.setInputHandler(input);
     }
     
     public void setView(View view) {
@@ -39,7 +33,7 @@ public class Window {
     
     public void display() {
         while (rw.isOpen()) {
-            input.handleInput(rw);
+            InputHandler.handleEvents(rw);
             rw.draw(State.getCurrentScreen());
             rw.display();
         }

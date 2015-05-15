@@ -1,11 +1,12 @@
 package ending.gamestate.screen;
 
 import ending.game.Game;
-import ending.gamestate.State;
+import ending.input.InputHandler;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.View;
+import org.jsfml.window.Keyboard;
 
 /**
  * The Screen for the Game to be displayed on.
@@ -24,18 +25,19 @@ public class GameScreen extends Screen {
      * Instantiates a new Game for this GameScreen to display.
      */
     public GameScreen() {
+        super();
+        
         game = new Game();
 
-        State.getInputHandler().addKeyListener((e) -> {
-            switch (e.key) {
+        addKeyListener((k) -> {
+            switch (k) {
                 case SPACE:
                     game.generateNewDungeon();
                     break;
                 case Z:
                     viewToggle = !viewToggle;
-                    break;
+                    break;    
             }
-
         });
 
         view = new View();
@@ -43,6 +45,7 @@ public class GameScreen extends Screen {
 
     @Override
     public void draw(RenderTarget rt, RenderStates states) {
+        
         rt.clear(Color.BLACK);
 
         game.update();

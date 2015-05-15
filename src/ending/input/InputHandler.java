@@ -1,11 +1,10 @@
 package ending.input;
 
 import ending.gamestate.State;
-import org.jsfml.graphics.RenderWindow;
 import ending.vector.Vector2i;
-import ending.widget.Button;
-import ending.widget.Widget;
+import org.jsfml.graphics.RenderWindow;
 import java.util.ArrayList;
+import org.jsfml.window.Keyboard;
 import org.jsfml.window.Mouse;
 import org.jsfml.window.event.Event;
 import org.jsfml.window.event.KeyEvent;
@@ -14,29 +13,33 @@ import org.jsfml.window.event.MouseEvent;
 
 /**
  * Handles all key presses and mouse actions.
+ *
  * @author Nick
  */
-public class InputHandler {
-    
-    private final ArrayList<KeyListener> keyListeners;
-    
-    public InputHandler() {
-        keyListeners = new ArrayList<>();
-    }
+public final class InputHandler {
+
+    private static final ArrayList<Keyboard.Key> keysPressed = new ArrayList<>();
+
+    private static final ArrayList<Mouse.Button> mouseButtonsPressed = new ArrayList<>();
+
+    private static Vector2i mousePosition;
 
     /**
-     * Handles the input of a RenderWindow.
+     * Handles the events of a RenderWindow.
+     *
      * @param rw the RenderWindow for this inputHandler to handle.
      */
-    public void handleInput(RenderWindow rw) {
+    public static void handleEvents(RenderWindow rw) {
         for (Event event : rw.pollEvents()) {
             switch (event.type) {
                 case CLOSED:
-                    System.out.println("!");
                     rw.close();
                     break;
                 case KEY_PRESSED:
                     handleKeyPress(event.asKeyEvent());
+                    break;
+                case KEY_RELEASED:
+                    handleKeyRelease(event.asKeyEvent());
                     break;
                 case MOUSE_MOVED:
                     handleMouseMove(event.asMouseEvent());
@@ -47,46 +50,42 @@ public class InputHandler {
             }
         }
     }
+
+    private static void handleKeyPress(KeyEvent keyEvent) {
+        if (!keysPressed.contains(keyEvent.key)) {
+            keysPressed.add(keyEvent.key);
+        }
+        
+        State.getCurrentScreen().getKeyListener().keyPressed(keyEvent.key);
+    }
+
+    private static void handleKeyRelease(KeyEvent keyEvent) {
+        keysPressed.remove(keyEvent.key);
+    }
     
-    public void addKeyListener(KeyListener k) {
-        keyListeners.add(k);
+    public static ArrayList<Keyboard.Key> getKeysPressed() {
+        return keysPressed;
     }
 
-    private void handleKeyPress(KeyEvent keyEvent) {
-        for (KeyListener k : keyListeners) {
-            k.keyPressed(keyEvent);
+    public static boolean isKeyPressed(Keyboard.Key key) {
+        return keysPressed.contains(key);
+    }
+
+    private static void handleMouseMove(MouseEvent mouseEvent) {
+        mousePosition = new Vector2i(mouseEvent.position);
+    }
+
+    private static void handleMouseClick(MouseButtonEvent mouseButtonEvent) {
+        if (!mouseButtonsPressed.contains(mouseButtonEvent.button)) {
+            mouseButtonsPressed.add(mouseButtonEvent.button);
         }
     }
-
-    private void handleMouseMove(MouseEvent mouseEvent) {
-        Vector2i mousePos = new Vector2i(mouseEvent.position);
-
-        for (Widget w : State.getCurrentScreen().getWidgets()) {
-            if (w instanceof Button) {
-                Button b = (Button) w;
-                if (b.getFrame().contains(mousePos)) {
-                    b.setEntered();
-                    return;
-                }
-                b.setExited();
-            }
-        }
+    
+    public static boolean isMouseButtonPressed(Mouse.Button button) {
+        return mouseButtonsPressed.contains(button);
     }
-
-    private void handleMouseClick(MouseButtonEvent mouseButtonEvent) {
-        Vector2i mousePos = new Vector2i(mouseButtonEvent.position);
-
-        if (mouseButtonEvent.button == Mouse.Button.LEFT) {
-            for (Widget w : State.getCurrentScreen().getWidgets()) {
-                if (w instanceof Button) {
-                    Button b = (Button) w;
-                    if (b.getFrame().contains(mousePos)) {
-                        b.setClicked();
-                        return;
-                    }
-                }
-            }
-        }
+    
+    public static Vector2i getMousePosition() {
+        return mousePosition;
     }
-
 }

@@ -2,11 +2,9 @@ package ending.tile;
 
 import ending.tile.corridor.StoneCorridorTile;
 import ending.tile.door.DoorTile;
-import ending.tile.floor.DirtFloorTile;
 import ending.tile.floor.StoneFloorTile;
 import ending.tile.stairs.DownStairsTile;
 import ending.tile.stairs.UpStairsTile;
-import ending.tile.wall.DirtWallTile;
 import ending.tile.wall.StoneWallTile;
 import ending.util.SpriteUtils;
 import java.util.Stack;
@@ -71,16 +69,12 @@ public abstract class Tile implements Drawable {
         switch (tileType) {
             case UNUSED:
                 return new UnusedTile();
-            case DIRTFLOOR:
-                return new DirtFloorTile();
             case STONEFLOOR:
                 return new StoneFloorTile();
             case STONECORRIDOR:
                 return new StoneCorridorTile();
             case DOOR:
                 return new DoorTile();
-            case DIRTWALL:
-                return new DirtWallTile();
             case STONEWALL:
                 return new StoneWallTile();
             case DOWNSTAIRS:
