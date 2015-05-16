@@ -36,7 +36,8 @@ public class EntityPhysicsComponent implements PhysicsComponent {
                 if (!t.isPassable()) {
                     FloatRect intersection = a.getBoundingRect().intersection(t.getGlobalBounds());
                     if (intersection != null) {
-                    }
+                        
+                    }   
                 }
             }
         }

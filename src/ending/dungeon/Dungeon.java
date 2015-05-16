@@ -1,7 +1,6 @@
 package ending.dungeon;
 
 import ending.entity.Entity;
-import ending.tile.TileType;
 import ending.tile.Tile;
 import ending.vector.Vector2i;
 import org.jsfml.graphics.Drawable;
@@ -16,6 +15,8 @@ import org.jsfml.system.Time;
  * @author Nick
  */
 public class Dungeon implements Drawable {
+    
+    private final DungeonStyle dungeonStyle;
 
     private final Vector2i size;
 
@@ -30,12 +31,13 @@ public class Dungeon implements Drawable {
      * @param size how many tiles this Dungeon will have, specified by (number
      * of columns, number of rows).
      */
-    public Dungeon(Vector2i size) {
+    public Dungeon(DungeonStyle dungeonStyle, Vector2i size) {
+        this.dungeonStyle = dungeonStyle;
         this.size = size;
         tileData = new Tile[size.x][size.y];
         for (int i = 0; i < size.x; i++) {
             for (int j = 0; j < size.y; j++) {
-                tileData[i][j] = Tile.getTileFromTileType(TileType.UNUSED);
+                tileData[i][j] = dungeonStyle.getUnusedTile();
             }
         }
         entityData = new Entity[size.x][size.y];
@@ -43,6 +45,10 @@ public class Dungeon implements Drawable {
     
     public Tile[][] getTiles() {
         return tileData;
+    }
+    
+    public DungeonStyle getDungeonStyle() {
+        return dungeonStyle;
     }
 
     /**
@@ -61,22 +67,6 @@ public class Dungeon implements Drawable {
     }
 
     /**
-     * Sets a cell to a Tile, based on a Tile Type.
-     *
-     * @param x the x coordinate of the cell to be set.
-     * @param y the y coordinate of the cell to be set.
-     * @param tileType the type of Tile to set this cell to.
-     */
-    public void setCell(int x, int y, TileType tileType) {
-        assert (isXInBounds(x) && isYInBounds(y)) : "Coordinates of cell out of bounds!";
-
-        Tile t = Tile.getTileFromTileType(tileType);
-        t.setPosition(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT);
-
-        tileData[x][y] = t;
-    }
-
-    /**
      * Gets the tile type of a cell.
      *
      * @param x the x coordinate of the cell.
@@ -89,27 +79,14 @@ public class Dungeon implements Drawable {
         return tileData[x][y];
     }
 
-    /**
-     * Gets the tile type of a cell.
-     *
-     * @param x the x coordinate of the cell.
-     * @param y the y coordinate of the cell.
-     * @return the tile type of the cell.
-     */
-    public TileType getCellType(int x, int y) {
+    public boolean holdsType(int x, int y, Tile tile) {
         assert (isXInBounds(x) && isYInBounds(y)) : "Coordinates of cell out of bounds!";
 
-        return tileData[x][y].getType();
-    }
-
-    public boolean holdsType(int x, int y, TileType type) {
-        assert (isXInBounds(x) && isYInBounds(y)) : "Coordinates of cell out of bounds!";
-
-        if (tileData[x][y].getType() == type) {
+        if (tileData[x][y].equals(tile)) {
             return true;
         } else {
             for (Tile t : tileData[x][y].getChildren()) {
-                if (t.getType() == type) {
+                if (t.equals(tile)) {
                     return true;
                 }
             }
@@ -140,26 +117,7 @@ public class Dungeon implements Drawable {
         
         for (int y = yStart; y <= yEnd; y++) {
             for (int x = xStart; x <= xEnd; x++) {
-                setCell(x, y, tile);
-            }
-        }
-    }
-
-    /**
-     * Sets a range of cells to a Tile, based on a Tile Type.
-     *
-     * @param xStart the starting x value of the range.
-     * @param yStart the starting y value of the range.
-     * @param xEnd the ending x value of the range.
-     * @param yEnd the ending y value of the range.
-     * @param tileType the type of tile to set the range of cells to.
-     */
-    public void setCells(int xStart, int yStart, int xEnd, int yEnd, TileType tileType) {
-        assert(isRangeInBounds(xStart, yStart, xEnd, yEnd)) : "Specified bounds invalid!";
-
-        for (int y = yStart; y <= yEnd; y++) {
-            for (int x = xStart; x <= xEnd; x++) {
-                setCell(x, y, tileType);
+                setCell(x, y, new Tile(tile.getTileType(), tile.isPassable()));
             }
         }
     }
@@ -196,7 +154,7 @@ public class Dungeon implements Drawable {
      * <code>Tile.UNUSED</code>, <code>false</code> otherwise.
      */
     public boolean isAreaUnused(int xStart, int yStart, int xEnd, int yEnd) {
-        return containsOnly(xStart, yStart, xEnd, yEnd, TileType.UNUSED);
+        return containsOnly(xStart, yStart, xEnd, yEnd, dungeonStyle.getUnusedTile());
     }
     
     /**
@@ -205,16 +163,16 @@ public class Dungeon implements Drawable {
      * @param yStart the starting y value of the range.
      * @param xEnd the ending x value of the range.
      * @param yEnd the ending y value of the range.
-     * @param tileType the TileType to check for.
+     * @param tile the Tile to check for.
      * @return <code>true</code> if each cell within the range is of type
      * <code>tileType</code>, <code>false</code> otherwise.
      */
-    public boolean containsOnly(int xStart, int yStart, int xEnd, int yEnd, TileType tileType) {
+    public boolean containsOnly(int xStart, int yStart, int xEnd, int yEnd, Tile tile) {
         assert(isRangeInBounds(xStart, yStart, xEnd, yEnd)) : "Specified bounds invalid!";
         
         for (int y = yStart; y <= yEnd; y++) {
             for (int x = xStart; x <= xEnd; x++) {
-                if (getCellType(x, y) != tileType) {
+                if (!getCell(x, y).equals(tile)) {
                     return false;
                 }
             }
@@ -228,17 +186,17 @@ public class Dungeon implements Drawable {
      *
      * @param x the x coordinate of the cell.
      * @param y the y coordinate of the cell.
-     * @param tileType the tile type to be checked if the cell is adjacent to.
+     * @param tile the tile  to be checked if the cell is adjacent to.
      * @return <code>true</code> if the cell has another cell of type
      * <code>tileType</code> adjacent (to the first cell north, east, south, or
      * west) to it, <code>false</code> otherwise
      */
-    public boolean isAdjacent(int x, int y, TileType tileType) {
+    public boolean isAdjacent(int x, int y, Tile tile) {
         assert (isXInBounds(x - 1) && isXInBounds(x + 1));
         assert (isYInBounds(y - 1) && isYInBounds(y + 1));
 
-        return holdsType(x - 1, y, tileType) || holdsType(x + 1, y, tileType)
-                || holdsType(x, y - 1, tileType) || holdsType(x, y + 1, tileType);
+        return holdsType(x - 1, y, tile) || holdsType(x + 1, y, tile)
+                || holdsType(x, y - 1, tile) || holdsType(x, y + 1, tile);
     }
     
     public void addEntity(int x, int y, Entity a) {

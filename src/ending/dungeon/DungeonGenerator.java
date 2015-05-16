@@ -1,9 +1,7 @@
 package ending.dungeon;
 
 import ending.tile.Tile;
-import ending.tile.TileType;
-import ending.tile.door.DoorTile;
-import ending.tile.floor.StoneFloorTile;
+import ending.tile.Tile;
 import ending.vector.Vector2i;
 import java.util.Random;
 
@@ -58,10 +56,11 @@ public class DungeonGenerator {
      * @param y the number of rows of the Dungeon.
      * @return the generated Dungeon.
      */
-    public Dungeon generate(int x, int y) {
+    public Dungeon generate(DungeonStyle dungeonStyle, int x, int y) {
         Random rand = new Random(seed);
         size = new Vector2i(x, y);
-        Dungeon dungeon = new Dungeon(size);
+        
+        Dungeon dungeon = new Dungeon(dungeonStyle, size);
 
         makeDungeon(dungeon, rand);
 
@@ -76,9 +75,9 @@ public class DungeonGenerator {
      * @param seed the seed of the RNG used by this Dungeon Generator.
      * @return the generated Dungeon.
      */
-    public Dungeon generate(int x, int y, long seed) {
+    public Dungeon generate(DungeonStyle dungeonStyle, int x, int y, long seed) {
         this.seed = seed;
-        return generate(x, y);
+        return generate(dungeonStyle, x, y);
     }
 
     private int randInt(Random rand, int min, int max) {
@@ -134,7 +133,7 @@ public class DungeonGenerator {
             return false;
         }
 
-        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONECORRIDOR);
+        dungeon.setCells(xStart, yStart, xEnd, yEnd, dungeon.getDungeonStyle().getCorridorTile());
 
         makeDoor(dungeon, doorX, doorY, direction);
 
@@ -182,9 +181,11 @@ public class DungeonGenerator {
         if (!isValidArea(dungeon, xStart, yStart, xEnd, yEnd)) {
             return false;
         }
+        
+        DungeonStyle style = dungeon.getDungeonStyle();
 
-        dungeon.setCells(xStart, yStart, xEnd, yEnd, TileType.STONEWALL);
-        dungeon.setCells(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, TileType.STONEFLOOR);
+        dungeon.setCells(xStart, yStart, xEnd, yEnd, style.getWallTile());
+        dungeon.setCells(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, style.getFloorTile());
 
         return true;
     }
@@ -202,7 +203,7 @@ public class DungeonGenerator {
         if (chance <= chanceRoom) {
             if (makeRoom(dungeon, rand, x + xmod, y + ymod, direction)) {
                 makeDoor(dungeon, x, y, direction);
-                dungeon.setCell(x + xmod, y + ymod, TileType.STONEFLOOR);
+                dungeon.setCell(x + xmod, y + ymod, dungeon.getDungeonStyle().getFloorTile());
                 return true;
             }
             return false;
@@ -212,8 +213,11 @@ public class DungeonGenerator {
     }
 
     private void makeDoor(Dungeon dungeon, int x, int y, Direction direction) {
-        StoneFloorTile floorAndDoor = new StoneFloorTile();
-        DoorTile door = new DoorTile();
+        
+        DungeonStyle style = dungeon.getDungeonStyle();
+        
+        Tile floorAndDoor = style.getFloorTile();
+        Tile door = style.getDoorTile();
         door.setPosition(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT);
         door.rotateBasedOnDirection(direction);
         if (checkDoor(dungeon, x, y, direction)) {
@@ -223,19 +227,30 @@ public class DungeonGenerator {
     }
 
     private boolean checkDoor(Dungeon dungeon, int x, int y, Direction direction) {
+        
+        Tile wall = dungeon.getDungeonStyle().getWallTile();
+        
         if (direction == Direction.NORTH || direction == Direction.SOUTH) {
-            if (dungeon.getCellType(x - 1, y) == TileType.STONEWALL
-                    && dungeon.getCellType(x + 1, y) == TileType.STONEWALL) {
+            if (dungeon.getCell(x - 1, y).equals(wall)
+                    && dungeon.getCell(x + 1, y).equals(wall)) {
                 return true;
             }
-        } else if (dungeon.getCellType(x, y - 1) == TileType.STONEWALL
-                && dungeon.getCellType(x, y + 1) == TileType.STONEWALL) {
+        } else if (dungeon.getCell(x, y - 1).equals(wall)
+                && dungeon.getCell(x, y + 1).equals(wall)) {
             return true;
         }
         return false;
     }
 
     private boolean makeFeature(Dungeon dungeon, Random rand) {
+        
+        DungeonStyle style = dungeon.getDungeonStyle();
+        
+        Tile wall = style.getWallTile();
+        Tile corridor = style.getCorridorTile();
+        Tile door = style.getDoorTile();
+        Tile floor = style.getFloorTile();
+        
         int maxTries = 1000;
 
         for (int tries = 0; tries < maxTries; tries++) {
@@ -247,33 +262,33 @@ public class DungeonGenerator {
             int x = randInt(rand, 1, size.x - 2);
             int y = randInt(rand, 1, size.y - 2);
 
-            TileType cellXY = dungeon.getCellType(x, y);
-            TileType cellXPlusOneY = dungeon.getCellType(x + 1, y);
-            TileType cellXMinusOneY = dungeon.getCellType(x - 1, y);
-            TileType cellXYPlusOne = dungeon.getCellType(x, y + 1);
-            TileType cellXYMinusOne = dungeon.getCellType(x, y - 1);
+            Tile cellXY = dungeon.getCell(x, y);
+            Tile cellXPlusOneY = dungeon.getCell(x + 1, y);
+            Tile cellXMinusOneY = dungeon.getCell(x - 1, y);
+            Tile cellXYPlusOne = dungeon.getCell(x, y + 1);
+            Tile cellXYMinusOne = dungeon.getCell(x, y - 1);
 
-            if (!(cellXY == TileType.STONEWALL || cellXY == TileType.STONECORRIDOR)) {
+            if (!(cellXY.equals(wall) || cellXY.equals(corridor))) {
                 continue;
             }
 
-            if (dungeon.isAdjacent(x, y, TileType.DOOR)) {
+            if (dungeon.isAdjacent(x, y, door)) {
                 continue;
             }
 
-            if (cellXYPlusOne == TileType.STONEFLOOR || cellXYPlusOne == TileType.STONECORRIDOR) {
+            if (cellXYPlusOne.equals(floor) || cellXYPlusOne.equals(corridor)) {
                 if (makeFeature(dungeon, rand, x, y, 0, -1, Direction.NORTH)) {
                     return true;
                 }
-            } else if (cellXMinusOneY == TileType.STONEFLOOR || cellXMinusOneY == TileType.STONECORRIDOR) {
+            } else if (cellXMinusOneY.equals(floor) || cellXMinusOneY.equals(corridor)) {
                 if (makeFeature(dungeon, rand, x, y, 1, 0, Direction.EAST)) {
                     return true;
                 }
-            } else if (cellXYMinusOne == TileType.STONEFLOOR || cellXYMinusOne == TileType.STONECORRIDOR) {
+            } else if (cellXYMinusOne.equals(floor) || cellXYMinusOne.equals(corridor)) {
                 if (makeFeature(dungeon, rand, x, y, 0, 1, Direction.SOUTH)) {
                     return true;
                 }
-            } else if (cellXPlusOneY == TileType.STONEFLOOR || cellXPlusOneY == TileType.STONECORRIDOR) {
+            } else if (cellXPlusOneY.equals(floor) || cellXPlusOneY.equals(corridor)) {
                 if (makeFeature(dungeon, rand, x, y, -1, 0, Direction.WEST)) {
                     return true;
                 }
@@ -282,24 +297,27 @@ public class DungeonGenerator {
         return false;
     }
 
-    private boolean makeStairs(Dungeon dungeon, Random rand, TileType tileType) {
+    private boolean makeStairs(Dungeon dungeon, Random rand, Tile tile) {
+        
+        DungeonStyle style = dungeon.getDungeonStyle();
+
         int maxTries = 10000;
 
         for (int tries = 0; tries < maxTries; tries++) {
             int x = randInt(rand, 1, size.x - 2);
             int y = randInt(rand, 1, size.y - 2);
 
-            if (!(dungeon.isAdjacent(x, y, TileType.STONEFLOOR)
-                    || dungeon.isAdjacent(x, y, TileType.STONECORRIDOR)
-                    && dungeon.isAdjacent(x, y, TileType.STONEWALL))) {
+            if (!(dungeon.isAdjacent(x, y, style.getFloorTile())
+                    || dungeon.isAdjacent(x, y, style.getCorridorTile())
+                    && dungeon.isAdjacent(x, y, style.getWallTile()))) {
                 continue;
             }
 
-            if (dungeon.isAdjacent(x, y, TileType.DOOR)) {
+            if (dungeon.isAdjacent(x, y, style.getDoorTile())) {
                 continue;
             }
 
-            dungeon.setCell(x, y, tileType);
+            dungeon.setCell(x, y, tile);
 
             return true;
         }
@@ -307,13 +325,15 @@ public class DungeonGenerator {
     }
 
     private boolean makeDungeon(Dungeon dungeon, Random rand) {
+        
+        DungeonStyle style = dungeon.getDungeonStyle();
 
         long start = System.nanoTime();
 
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
                 if (y == 0 || y == size.y - 1 || x == 0 || x == size.x - 1) {
-                    dungeon.setCell(x, y, TileType.STONEWALL);
+                    dungeon.setCell(x, y, style.getWallTile());
                 }
             }
         }
@@ -327,18 +347,18 @@ public class DungeonGenerator {
             }
         }
 
-        if (!makeStairs(dungeon, rand, TileType.UPSTAIRS)) {
+        if (!makeStairs(dungeon, rand, style.getUpStairsTile())) {
             System.out.println("Unable to place up stairs.");
         }
 
-        if (!makeStairs(dungeon, rand, TileType.DOWNSTAIRS)) {
+        if (!makeStairs(dungeon, rand, style.getDownStairsTile())) {
             System.out.println("Unable to place down stairs");
         }
 
         for (int y = 0; y < size.y; y++) {
             for (int x = 0; x < size.x; x++) {
-                if (dungeon.getCellType(x, y) == TileType.UNUSED) {
-                    dungeon.setCell(x, y, TileType.STONEWALL);
+                if (dungeon.getCell(x, y).equals(style.getUnusedTile())) {
+                    dungeon.setCell(x, y, style.getWallTile());
                 }
             }
         }

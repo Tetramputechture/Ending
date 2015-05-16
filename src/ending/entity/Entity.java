@@ -9,7 +9,6 @@ import ending.util.TextureUtils;
 import ending.vector.Vector2f;
 import org.jsfml.graphics.BasicTransformable;
 import org.jsfml.graphics.FloatRect;
-import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.system.Time;
 

@@ -5,8 +5,6 @@ import ending.component.InputComponent;
 import ending.input.InputHandler;
 import ending.vector.Vector2f;
 import org.jsfml.window.Keyboard;
-import org.jsfml.window.Mouse;
-
 /**
  *
  * @author Nick
@@ -32,5 +30,4 @@ public class PlayerInputComponent implements InputComponent {
             velocity.y -= speed;
         }
     }
-
 }

@@ -1,54 +1,35 @@
 package ending.tile;
 
+import static ending.util.TextureUtils.loadTexture;
+import org.jsfml.graphics.Texture;
+
 /**
- * The different types of Tiles.
+ *
  * @author Nick
  */
 public enum TileType {
-
-    /**
-     * The Unused Tile.
-     */
-    UNUSED,
-
-    /**
-     * The Dirt Wall Tile.
-     */
-    DIRTWALL,
-
-    /**
-     * The Dirt Floor Tile.
-     */
-    DIRTFLOOR,
-
-    /**
-     * The Stone Wall Tile.
-     */
-    STONEWALL,
-
-    /**
-     * The Stone Floor Tile.
-     */
-    STONEFLOOR,
-
-    /**
-     * The Stone Corridor Tile.
-     */
-    STONECORRIDOR,
-
-    /**
-     * The Door Tile.
-     */
-    DOOR,
-
-    /**
-     * The Up Stairs Tile.
-     */
-    UPSTAIRS,
-
-    /**
-     * The Down Stairs Tile.
-     */
-    DOWNSTAIRS
-
+    
+    UNUSED("sprites/tiles/unused.png"),
+    
+    STONEFLOOR("sprites/tiles/stonefloor.png"),
+    
+    STONEWALL("sprites/tiles/stonewall.png"),
+    
+    DOOR("sprites/tiles/door.png"),
+    
+    UPSTAIRS("sprites/tiles/upstairs.png"),
+    
+    DOWNSTAIRS("sprites/tiles/downstairs.png");
+    
+    private final String path = "sprites/tiles/";
+    
+    private final Texture texture;
+    
+    public Texture getTexture() {
+        return texture;
+    }
+    
+    TileType(String textureName) {
+        texture = loadTexture(textureName);
+    }
 }

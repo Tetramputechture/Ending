@@ -12,14 +12,7 @@ import org.jsfml.audio.SoundBuffer;
  */
 public final class AudioHandler {
     
-    private final Sound sound;
-    
-    /**
-     * Constructs a new Sound object to hold the SoundBuffer.
-     */
-    public AudioHandler() {
-        sound = new Sound();
-    }
+    private static final Sound sound = new Sound();
     
     /**
      * Plays a sound with specified filename and pitch.
@@ -27,7 +20,7 @@ public final class AudioHandler {
      * @param filename the filename of the sound to be played
      * @param pitch the pitch of the played sound
      */
-    public void playSound(String filename, float pitch) {
+    public static void playSound(String filename, float pitch) {
 
         SoundBuffer sBuffer = new SoundBuffer();
 

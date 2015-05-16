@@ -1,6 +1,5 @@
 package ending.widget;
 
-import java.util.LinkedList;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
@@ -14,14 +13,12 @@ import org.jsfml.graphics.View;
 public abstract class Widget implements Drawable {
 
     /**
-     * The CWidgets that this Widget holds.
-     */
-    private LinkedList<Widget> containedWidgets;
-
-    /**
      * The View that this Widget is parented to.
      */
     protected View view;
+    
+    public void update() {
+    }
 
     @Override
     public abstract void draw(RenderTarget rt, RenderStates states);

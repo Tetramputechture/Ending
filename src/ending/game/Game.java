@@ -3,6 +3,7 @@ package ending.game;
 import ending.entity.Entity;
 import ending.dungeon.Dungeon;
 import ending.dungeon.DungeonGenerator;
+import ending.dungeon.StoneDungeonStyle;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
@@ -33,7 +34,7 @@ public class Game implements Drawable {
      */
     public Game() {
         dg = new DungeonGenerator();
-        dungeon = dg.generate(40, 30);
+        dungeon = dg.generate(new StoneDungeonStyle(), 40, 30);
         view = new View();
         view.setSize(320, 240);
         player = Entity.createPlayer();
@@ -46,7 +47,7 @@ public class Game implements Drawable {
     }
     
     public void generateNewDungeon() {
-        dungeon = dg.generate(40, 30, System.currentTimeMillis());
+        dungeon = dg.generate(new StoneDungeonStyle(), 40, 30, System.currentTimeMillis());
         dungeon.addEntity(20, 15, player);
     }
     

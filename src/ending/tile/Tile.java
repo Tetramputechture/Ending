@@ -1,11 +1,9 @@
 package ending.tile;
 
-import ending.tile.corridor.StoneCorridorTile;
-import ending.tile.door.DoorTile;
-import ending.tile.floor.StoneFloorTile;
-import ending.tile.stairs.DownStairsTile;
-import ending.tile.stairs.UpStairsTile;
-import ending.tile.wall.StoneWallTile;
+import ending.dungeon.Direction;
+import static ending.dungeon.Direction.EAST;
+import static ending.dungeon.Direction.SOUTH;
+import static ending.dungeon.Direction.WEST;
 import ending.util.SpriteUtils;
 import java.util.Stack;
 import org.jsfml.graphics.Drawable;
@@ -20,7 +18,7 @@ import org.jsfml.system.Vector2f;
  * A Tile that encapsulates every object within a Dungeon.
  * @author Nick
  */
-public abstract class Tile implements Drawable {
+public class Tile implements Drawable {
     
     /**
      * The width of every Tile.
@@ -35,7 +33,12 @@ public abstract class Tile implements Drawable {
     /**
      * The Sprite of this Tile.
      */
-    protected final Sprite sprite;
+    private final Sprite sprite;
+    
+    /**
+     * The Texture of this Tile.
+     */
+    private final TileType tileType;
     
     private Transform transform;
 
@@ -47,59 +50,16 @@ public abstract class Tile implements Drawable {
      * Initializes the Sprite and children of this Tile, 
      * and sets its Passable field to false.
      */
-    public Tile() {
-        sprite = new Sprite();
+    public Tile(TileType texture, boolean isPassable) {
+        this.tileType= texture;
+        this.passable = isPassable;
+        sprite = new Sprite(texture.getTexture());
         transform = new Transform();
         children = new Stack<>();
-        passable = false;
-    }
-
-    /**
-     * Returns the TileType of this Tile.
-     * @return the TileType of this tile; all types found in TileTypes.
-     */
-    public abstract TileType getType();
-
-    /**
-     * Returns a new instance of a Tile based on a TileType.
-     * @param tileType the type of Tile to return.
-     * @return a new Tile of type tileType.
-     */
-    public static Tile getTileFromTileType(TileType tileType) {
-        switch (tileType) {
-            case UNUSED:
-                return new UnusedTile();
-            case STONEFLOOR:
-                return new StoneFloorTile();
-            case STONECORRIDOR:
-                return new StoneCorridorTile();
-            case DOOR:
-                return new DoorTile();
-            case STONEWALL:
-                return new StoneWallTile();
-            case DOWNSTAIRS:
-                return new DownStairsTile();
-            case UPSTAIRS:
-                return new UpStairsTile();
-            default:
-                return null;
-        }
     }
     
-    /**
-     * Gets the X coordinate of this Tile's sprite.
-     * @return the x coordinate of this Tile's position.
-     */
-    public float getPositionX() {
-        return sprite.getPosition().x;
-    }
-    
-    /**
-     * Gets the Y coordinate of this Tile's sprite.
-     * @return the Y coordinate of this Tile's position.
-     */
-    public float getPositionY() {
-        return sprite.getPosition().y;
+    public TileType getTileType() {
+        return tileType;
     }
     
     public Vector2f getPosition() {
@@ -115,9 +75,24 @@ public abstract class Tile implements Drawable {
     }
     
     public void rotateAroundCenter(float degrees) {
-        ending.vector.Vector2f center = SpriteUtils.getTextureCenter(TileTextures.DOORTEXTURE);
+        ending.vector.Vector2f center = SpriteUtils.getTextureCenter(tileType.getTexture());
         ending.vector.Vector2f rotateOrigin = new ending.vector.Vector2f(sprite.getPosition()).add(center);
         transform = Transform.rotate(transform, degrees, rotateOrigin.x, rotateOrigin.y);
+    }
+    
+    public void rotateBasedOnDirection(Direction direction) {
+        switch (direction) {
+            // door sprite is already aligned with North direction
+            case EAST:
+                rotateAroundCenter(90);
+                break;
+            case SOUTH:
+                rotateAroundCenter(180);
+                break;
+            case WEST:
+                rotateAroundCenter(-90);
+                break;
+        }
     }
 
     /**
@@ -144,10 +119,6 @@ public abstract class Tile implements Drawable {
         children.push(tile);
     }
     
-    public void pushTile(TileType tileType) {
-        children.push(getTileFromTileType(tileType));
-    }
-    
     public Tile popTile() {
         return children.pop();
     }
@@ -159,14 +130,6 @@ public abstract class Tile implements Drawable {
      */
     public boolean isPassable() {
         return passable;
-    }
-
-    /**
-     * Sets if this Tile is passable or not.
-     * @param passable the state to change this Tile's passable field to.
-     */
-    public void setPassable(boolean passable) {
-        this.passable = passable;
     }
 
     public void draw(RenderTarget rt, RenderStates states) {
@@ -181,5 +144,29 @@ public abstract class Tile implements Drawable {
         for (Tile t : children) {
             t.draw(rt, newStates);
         }
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        
+        if (o == null) {
+            return false;
+        }
+        
+        if (o.getClass() != getClass()) {
+            return false;
+        }
+        
+        Tile t = (Tile) o;
+        
+        return tileType == t.tileType && passable == t.passable;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + tileType.hashCode();
+        hash = 37 * hash + (passable ? 1 : 0);
+        return hash;
     }
 }

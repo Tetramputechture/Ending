@@ -1,6 +1,7 @@
 package ending.window;
 
 import ending.gamestate.State;
+import ending.gamestate.screen.Screen;
 import ending.gamestate.screen.ScreenType;
 import ending.input.InputHandler;
 import org.jsfml.graphics.RenderWindow;
@@ -33,8 +34,10 @@ public class Window {
     
     public void display() {
         while (rw.isOpen()) {
+            Screen s = State.getCurrentScreen();
             InputHandler.handleEvents(rw);
-            rw.draw(State.getCurrentScreen());
+            s.update();
+            rw.draw(s);
             rw.display();
         }
     }

@@ -28,7 +28,7 @@ public class Button extends Widget {
      * The Frame of this Button.
      */
     private final Frame frame;
-    
+
     private MouseListener mouseListener;
 
     /**
@@ -44,7 +44,7 @@ public class Button extends Widget {
     }
 
     @Override
-    public void draw(RenderTarget rt, RenderStates states) {   
+    public void update() {
         if (mouseListener != null) {
             Vector2i pos = InputHandler.getMousePosition();
             if (pos != null && frame.contains(InputHandler.getMousePosition())) {
@@ -56,11 +56,14 @@ public class Button extends Widget {
                 mouseListener.mouseExited();
             }
         }
-        
+    }
+
+    @Override
+    public void draw(RenderTarget rt, RenderStates states) {
         rt.draw(label);
         rt.draw(frame);
     }
-    
+
     public void addMouseListener(MouseListener l) {
         mouseListener = l;
     }

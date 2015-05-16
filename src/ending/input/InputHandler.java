@@ -56,7 +56,10 @@ public final class InputHandler {
             keysPressed.add(keyEvent.key);
         }
         
-        State.getCurrentScreen().getKeyListener().keyPressed(keyEvent.key);
+        KeyListener k = State.getCurrentScreen().getKeyListener();
+        if (k != null) {
+            k.keyPressed(keyEvent);
+        }
     }
 
     private static void handleKeyRelease(KeyEvent keyEvent) {

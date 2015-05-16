@@ -21,7 +21,7 @@ public abstract class Screen implements Drawable {
     protected final ArrayList<Widget> widgets;
     
     /**
-     * The KeyListeners listening to this Screen.
+     * The KeyListener listening to this Screen.
      */
     private KeyListener keyListener;
 
@@ -61,6 +61,12 @@ public abstract class Screen implements Drawable {
      */
     public ArrayList<Widget> getWidgets() {
         return widgets;
+    }
+    
+    public void update() {
+        for (Widget w : widgets) {
+            w.update();
+        }
     }
     
     @Override

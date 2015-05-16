@@ -30,7 +30,7 @@ public class GameScreen extends Screen {
         game = new Game();
 
         addKeyListener((k) -> {
-            switch (k) {
+            switch (k.key) {
                 case SPACE:
                     game.generateNewDungeon();
                     break;
@@ -42,12 +42,11 @@ public class GameScreen extends Screen {
 
         view = new View();
     }
-
+    
     @Override
-    public void draw(RenderTarget rt, RenderStates states) {
+    public void update() {
+        super.update();
         
-        rt.clear(Color.BLACK);
-
         game.update();
 
         if (viewToggle) {
@@ -57,7 +56,12 @@ public class GameScreen extends Screen {
             view.setSize(1280, 960);
             view.setCenter(640, 480);
         }
-        
+    }
+
+    @Override
+    public void draw(RenderTarget rt, RenderStates states) {
+        rt.clear(Color.BLACK);
+
         rt.setView(view);
         rt.draw(game);
     }
