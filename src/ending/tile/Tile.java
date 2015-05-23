@@ -50,10 +50,10 @@ public class Tile implements Drawable {
      * Initializes the Sprite and children of this Tile, 
      * and sets its Passable field to false.
      */
-    public Tile(TileType texture, boolean isPassable) {
-        this.tileType= texture;
+    public Tile(TileType type, boolean isPassable) {
+        this.tileType= type;
         this.passable = isPassable;
-        sprite = new Sprite(texture.getTexture());
+        sprite = new Sprite(type.getTexture());
         transform = new Transform();
         children = new Stack<>();
     }

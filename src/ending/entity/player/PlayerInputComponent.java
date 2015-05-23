@@ -1,7 +1,7 @@
 package ending.entity.player;
 
 import ending.entity.Entity;
-import ending.component.InputComponent;
+import ending.entity.EntityInputComponent;
 import ending.input.InputHandler;
 import ending.vector.Vector2f;
 import org.jsfml.window.Keyboard;
@@ -9,12 +9,13 @@ import org.jsfml.window.Keyboard;
  *
  * @author Nick
  */
-public class PlayerInputComponent implements InputComponent {
+public class PlayerInputComponent extends EntityInputComponent {
     
     private final int speed = 70;
 
     @Override
     public void update(Entity a) {
+        
         Vector2f velocity = a.getVelocity();
         
         if (InputHandler.isKeyPressed(Keyboard.Key.S)) {

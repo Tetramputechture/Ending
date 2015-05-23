@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import org.jsfml.graphics.Image;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Texture;
-import org.jsfml.system.Vector2f;
 
 /**
  * Handles animation. Major credit to Maximilian Wagenbach (aka. Foaly)

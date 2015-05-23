@@ -4,8 +4,17 @@ import ending.gamestate.State;
 import ending.gamestate.screen.Screen;
 import ending.gamestate.screen.ScreenType;
 import ending.input.InputHandler;
+import java.io.IOException;
+import java.nio.file.Paths;
+import org.jsfml.graphics.RenderStates;
+import org.jsfml.graphics.RenderTexture;
 import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.Shader;
+import org.jsfml.graphics.ShaderSourceException;
+import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.TextureCreationException;
 import org.jsfml.graphics.View;
+import org.jsfml.system.Vector2f;
 import org.jsfml.window.ContextSettings;
 import org.jsfml.window.VideoMode;
 import org.jsfml.window.WindowStyle;
@@ -35,10 +44,17 @@ public class Window {
     public void display() {
         while (rw.isOpen()) {
             Screen s = State.getCurrentScreen();
-            InputHandler.handleEvents(rw);
             s.update();
+            
+            rw.clear();
             rw.draw(s);
             rw.display();
+            
+            InputHandler.handleEvents(this);
         }
+    }
+    
+    public void resize() {
+        
     }
 }

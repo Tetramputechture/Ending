@@ -34,7 +34,7 @@ public class Game implements Drawable {
      */
     public Game() {
         dg = new DungeonGenerator();
-        dungeon = dg.generate(new StoneDungeonStyle(), 40, 30);
+        dungeon = dg.generate(new StoneDungeonStyle(), 40, 30, 1431834694713L);
         view = new View();
         view.setSize(320, 240);
         player = Entity.createPlayer();

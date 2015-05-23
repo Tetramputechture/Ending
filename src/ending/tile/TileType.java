@@ -13,15 +13,21 @@ public enum TileType {
     
     STONEFLOOR("sprites/tiles/stonefloor.png"),
     
-    STONEWALL("sprites/tiles/stonewall.png"),
+    STONEVOID("sprites/tiles/stonewall.png"),
+    
+    STONEWALL_NORTH("sprites/tiles/stonewallnorth.png"),
+    
+    STONEWALL_EAST("sprites/tiles/stonewalleast.png"),
+    
+    STONEWALL_WEST("sprites/tiles/stonewallwest.png"),
+    
+    STONEWALL_SOUTH("sprites/tiles/stonewallsouth.png"),
     
     DOOR("sprites/tiles/door.png"),
     
     UPSTAIRS("sprites/tiles/upstairs.png"),
     
     DOWNSTAIRS("sprites/tiles/downstairs.png");
-    
-    private final String path = "sprites/tiles/";
     
     private final Texture texture;
     

@@ -12,6 +12,16 @@ public final class State {
     
     private static Screen currentScreen;
     
+    private static boolean showEntityBoundingBoxes;
+
+    public static boolean isShowEntityBoundingBoxes() {
+        return showEntityBoundingBoxes;
+    }
+    
+    public static void toggleEntityBoundingBoxVisibility() {
+        showEntityBoundingBoxes = !showEntityBoundingBoxes;
+    }
+    
     /**
      * Gets the current Screen of the State.
      * @return the State's current displaying Screen.

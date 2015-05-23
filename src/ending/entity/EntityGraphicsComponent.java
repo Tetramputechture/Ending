@@ -3,15 +3,14 @@ package ending.entity;
 import ending.animation.AnimatedSprite;
 import ending.animation.Animation;
 import ending.component.GraphicsComponent;
+import ending.gamestate.State;
 import ending.vector.Vector2f;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RectangleShape;
-import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Texture;
-import org.jsfml.graphics.Transform;
 import org.jsfml.system.Time;
 
 /**
@@ -38,13 +37,19 @@ public class EntityGraphicsComponent implements GraphicsComponent {
     
     private final int numFrames = 5;
     
-    private final RectangleShape outline;
+    private final RectangleShape entityBoundingBoxOutline;
+    private final RectangleShape geometryBoundingBoxOutline;
     
     public EntityGraphicsComponent(Texture spriteSheet) {
-        outline = new RectangleShape();
-        outline.setFillColor(Color.TRANSPARENT);
-        outline.setOutlineColor(Color.WHITE);
-        outline.setOutlineThickness(1);
+        entityBoundingBoxOutline = new RectangleShape();
+        entityBoundingBoxOutline.setFillColor(Color.TRANSPARENT);
+        entityBoundingBoxOutline.setOutlineColor(Color.RED);
+        entityBoundingBoxOutline.setOutlineThickness(1);
+        
+        geometryBoundingBoxOutline = new RectangleShape();
+        geometryBoundingBoxOutline.setFillColor(Color.TRANSPARENT);
+        geometryBoundingBoxOutline.setOutlineColor(Color.WHITE);
+        geometryBoundingBoxOutline.setOutlineThickness(1);
         
         sprite = new AnimatedSprite(Time.getSeconds(0.1f), true, false);
         
@@ -133,15 +138,23 @@ public class EntityGraphicsComponent implements GraphicsComponent {
         sprite.setPosition(a.getPosition());
         
         FloatRect spriteBounds = sprite.getGlobalBounds();
+        FloatRect geoBounds = new FloatRect(spriteBounds.left+3, spriteBounds.top+spriteBounds.height-3, spriteBounds.width-6, 3);
         
-        // update bounding rectangle
-        a.setBoundingRect(spriteBounds);
-        
-        outline.setPosition(sprite.getPosition());
-        outline.setSize(new Vector2f(spriteBounds.width, spriteBounds.height).toVector2f());
+        // update bounding boxes
+        a.setEntityBoundingBox(spriteBounds);
+        a.setGeometryBoundingBox(geoBounds);
+           
+        entityBoundingBoxOutline.setPosition(sprite.getPosition());
+        entityBoundingBoxOutline.setSize(new Vector2f(spriteBounds.width, spriteBounds.height).toVector2f());
+       
+        geometryBoundingBoxOutline.setPosition(geoBounds.left, geoBounds.top);
+        geometryBoundingBoxOutline.setSize(new Vector2f(geoBounds.width, geoBounds.height).toVector2f());
         
         rt.draw(sprite);
-        rt.draw(outline);
+        if (State.isShowEntityBoundingBoxes()) {
+            //rt.draw(entityBoundingBoxOutline);
+            rt.draw(geometryBoundingBoxOutline);
+        }
     }
     
 }

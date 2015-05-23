@@ -1,6 +1,7 @@
 package ending.gamestate.screen;
 
 import ending.game.Game;
+import ending.gamestate.State;
 import ending.input.InputHandler;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderStates;
@@ -37,6 +38,9 @@ public class GameScreen extends Screen {
                 case Z:
                     viewToggle = !viewToggle;
                     break;    
+                case B:
+                    State.toggleEntityBoundingBoxVisibility();
+                    break;
             }
         });
 

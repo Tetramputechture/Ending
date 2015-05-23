@@ -2,8 +2,9 @@ package ending.input;
 
 import ending.gamestate.State;
 import ending.vector.Vector2i;
-import org.jsfml.graphics.RenderWindow;
+import ending.window.Window;
 import java.util.ArrayList;
+import org.jsfml.graphics.RenderWindow;
 import org.jsfml.window.Keyboard;
 import org.jsfml.window.Mouse;
 import org.jsfml.window.event.Event;
@@ -25,11 +26,12 @@ public final class InputHandler {
     private static Vector2i mousePosition;
 
     /**
-     * Handles the events of a RenderWindow.
+     * Handles the events of a Window.
      *
-     * @param rw the RenderWindow for this inputHandler to handle.
+     * @param w the Window for this inputHandler to handle.
      */
-    public static void handleEvents(RenderWindow rw) {
+    public static void handleEvents(Window w) {
+        RenderWindow rw = w.getRenderWindow();
         for (Event event : rw.pollEvents()) {
             switch (event.type) {
                 case CLOSED:

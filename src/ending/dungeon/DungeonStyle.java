@@ -9,12 +9,12 @@ import ending.tile.Tile;
 public interface DungeonStyle {
     
     public Tile getUnusedTile();
+        
+    public Tile getVoidTile();
+    
+    public Tile getWallTile(Direction direction);
     
     public Tile getFloorTile();
-    
-    public Tile getCorridorTile();
-    
-    public Tile getWallTile();
     
     public Tile getDoorTile();
     

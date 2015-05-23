@@ -24,7 +24,10 @@ public class Entity extends BasicTransformable {
      
     private final Vector2f velocity;
     
-    private FloatRect boundingRect;
+    private FloatRect entityBoundingBox;
+    private FloatRect geometryBoundingBox;
+
+    private boolean showBoundingBoxes;
     
     public Entity(InputComponent input,
             GraphicsComponent graphics,
@@ -46,12 +49,28 @@ public class Entity extends BasicTransformable {
         return velocity;
     }
     
-    public void setBoundingRect(FloatRect rect) {
-        this.boundingRect = rect;
+    public void setEntityBoundingBox(FloatRect box) {
+        this.entityBoundingBox = box;
     }
 
-    public FloatRect getBoundingRect() {
-        return boundingRect;
+    public FloatRect getEntityBoundingBox() {
+        return entityBoundingBox;
+    }
+    
+    public void setGeometryBoundingBox(FloatRect box) {
+        this.geometryBoundingBox = box;
+    }
+    
+    public FloatRect getGeometryBoundingBox() {
+        return geometryBoundingBox;
+    }
+    
+    public boolean isShowBoundingBoxes() {
+        return showBoundingBoxes;
+    }
+
+    public void setShowBoundingBoxes(boolean showBoundingBoxes) {
+        this.showBoundingBoxes = showBoundingBoxes;
     }
     
     public static Entity createPlayer() {

@@ -40,17 +40,6 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
 
     private final Vertex[] vertices;
     
-    private int minX, maxX, minY, maxY;
-    private int height;
-
-    public int getMinX() {
-        return minX;
-    }
-
-    public int getMinY() {
-        return minY;
-    }
-
     public AnimatedSprite(Time frameTime, boolean paused, boolean looped) {
         this.frameTime = frameTime;
         isPaused = paused;
@@ -65,7 +54,6 @@ public class AnimatedSprite extends BasicTransformable implements Drawable {
         setFrame(currentFrame, true);
     }
     
-
     public void setFrameTime(Time time) {
         this.frameTime = time;
     }

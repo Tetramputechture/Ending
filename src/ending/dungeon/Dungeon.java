@@ -14,7 +14,7 @@ import org.jsfml.system.Time;
  *
  * @author Nick
  */
-public class Dungeon implements Drawable {
+public final class Dungeon implements Drawable {
     
     private final DungeonStyle dungeonStyle;
 
@@ -35,9 +35,9 @@ public class Dungeon implements Drawable {
         this.dungeonStyle = dungeonStyle;
         this.size = size;
         tileData = new Tile[size.x][size.y];
-        for (int i = 0; i < size.x; i++) {
-            for (int j = 0; j < size.y; j++) {
-                tileData[i][j] = dungeonStyle.getUnusedTile();
+        for (int x = 0; x < size.x; x++) {
+            for (int y = 0; y < size.y; y++) {
+                setCell(x, y, dungeonStyle.getUnusedTile());
             }
         }
         entityData = new Entity[size.x][size.y];
@@ -65,7 +65,34 @@ public class Dungeon implements Drawable {
 
         tileData[x][y] = tile;
     }
+    
+    public void pushCell(int x, int y, Tile tile) {
+        assert (isXInBounds(x) && isYInBounds(y)) : "Coordinates of cell out of bounds!";
 
+        tile.setPosition(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT);
+        
+        tileData[x][y].pushTile(tile);
+    }
+
+    /**
+     * Sets a range of cells to a tile.
+     *
+     * @param xStart the starting x value of the range.
+     * @param yStart the starting y value of the range.
+     * @param xEnd the ending x value of the range.
+     * @param yEnd the ending y value of the range.
+     * @param tile the tile to set the range of cells to.
+     */
+    public void setCells(int xStart, int yStart, int xEnd, int yEnd, Tile tile) {
+        assert(isRangeInBounds(xStart, yStart, xEnd, yEnd)) : "Specified bounds invalid!";
+        
+        for (int y = yStart; y <= yEnd; y++) {
+            for (int x = xStart; x <= xEnd; x++) {
+                setCell(x, y, new Tile(tile.getTileType(), tile.isPassable()));
+            }
+        }
+    }
+    
     /**
      * Gets the tile type of a cell.
      *
@@ -104,25 +131,6 @@ public class Dungeon implements Drawable {
     }
 
     /**
-     * Sets a range of cells to a tile.
-     *
-     * @param xStart the starting x value of the range.
-     * @param yStart the starting y value of the range.
-     * @param xEnd the ending x value of the range.
-     * @param yEnd the ending y value of the range.
-     * @param tile the tile to set the range of cells to.
-     */
-    public void setCells(int xStart, int yStart, int xEnd, int yEnd, Tile tile) {
-        assert(isRangeInBounds(xStart, yStart, xEnd, yEnd)) : "Specified bounds invalid!";
-        
-        for (int y = yStart; y <= yEnd; y++) {
-            for (int x = xStart; x <= xEnd; x++) {
-                setCell(x, y, new Tile(tile.getTileType(), tile.isPassable()));
-            }
-        }
-    }
-
-    /**
      * Returns if an integer is within this Dungeon's number of columns.
      *
      * @param x the x coordinate to be checked.
@@ -130,7 +138,7 @@ public class Dungeon implements Drawable {
      * <code>false</code> otherwise.
      */
     public boolean isXInBounds(int x) {
-        return x >= 0 && x < size.x;
+        return x >= 0 && x < tileData.length;
     }
 
     /**
@@ -140,7 +148,7 @@ public class Dungeon implements Drawable {
      * @return true if 0 &lt= x &lt= Dungeon Rows, false otherwise.
      */
     public boolean isYInBounds(int y) {
-        return y >= 0 && y < size.y;
+        return y >= 0 && y < tileData[0].length;
     }
 
     /**
@@ -182,7 +190,7 @@ public class Dungeon implements Drawable {
     }
 
     /**
-     * Returns if a cell is adjacent to a cell of a certain tile type.
+     * Returns if a cell is adjacent to a cell of a certain tile.
      *
      * @param x the x coordinate of the cell.
      * @param y the y coordinate of the cell.
