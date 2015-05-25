@@ -2,9 +2,12 @@ package ending.entity;
 
 import ending.animation.AnimatedSprite;
 import ending.animation.Animation;
+import ending.audio.AudioHandler;
 import ending.component.GraphicsComponent;
 import ending.gamestate.State;
 import ending.vector.Vector2f;
+import org.jsfml.audio.Music;
+import org.jsfml.audio.SoundSource;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.IntRect;
@@ -39,6 +42,8 @@ public class EntityGraphicsComponent implements GraphicsComponent {
     
     private final RectangleShape entityBoundingBoxOutline;
     private final RectangleShape geometryBoundingBoxOutline;
+    
+    private final Music footstepMusic;
     
     public EntityGraphicsComponent(Texture spriteSheet) {
         entityBoundingBoxOutline = new RectangleShape();
@@ -80,6 +85,9 @@ public class EntityGraphicsComponent implements GraphicsComponent {
         currentAnimation = south;
         
         sprite.setAnimation(currentAnimation);
+        
+        footstepMusic = AudioHandler.loadMusic("sounds/footstep.wav");
+        footstepMusic.setLoop(true);
     }
     
     private void addFramesToAnimation(Animation animation, int height) {
@@ -131,6 +139,11 @@ public class EntityGraphicsComponent implements GraphicsComponent {
         // if not moving, stop animation
         if (velocity.isZero()) {
             sprite.stop();
+            footstepMusic.stop();
+        } else {
+            if (footstepMusic.getStatus() == SoundSource.Status.STOPPED) {
+                footstepMusic.play();
+            }
         }
 
         sprite.update(deltaTime);
@@ -151,10 +164,10 @@ public class EntityGraphicsComponent implements GraphicsComponent {
         geometryBoundingBoxOutline.setSize(new Vector2f(geoBounds.width, geoBounds.height).toVector2f());
         
         rt.draw(sprite);
+        
         if (State.isShowEntityBoundingBoxes()) {
-            //rt.draw(entityBoundingBoxOutline);
+            rt.draw(entityBoundingBoxOutline);
             rt.draw(geometryBoundingBoxOutline);
         }
     }
-    
 }

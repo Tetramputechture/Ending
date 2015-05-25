@@ -36,7 +36,7 @@ public class Game implements Drawable {
         dg = new DungeonGenerator();
         dungeon = dg.generate(new StoneDungeonStyle(), 40, 30, 1431834694713L);
         view = new View();
-        view.setSize(320, 240);
+        view.setSize(400, 300);
         player = Entity.createPlayer();
         dungeon.addEntity(20, 15, player);
         frameClock = new Clock();
@@ -58,10 +58,6 @@ public class Game implements Drawable {
 
     @Override
     public void draw(RenderTarget rt, RenderStates states) {
-        rt.draw(dungeon);
-        dungeon.updateEntities(deltaTime, rt);
+        dungeon.update(deltaTime, rt, states);
     }
-    
-    
-    
 }

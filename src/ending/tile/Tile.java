@@ -11,6 +11,7 @@ import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.Transform;
 import org.jsfml.system.Vector2f;
 
@@ -44,15 +45,11 @@ public class Tile implements Drawable {
 
     private final Stack<Tile> children;
     
-    private boolean passable;
+    private final boolean passable;
 
-    /**
-     * Initializes the Sprite and children of this Tile, 
-     * and sets its Passable field to false.
-     */
-    public Tile(TileType type, boolean isPassable) {
+    public Tile(TileType type) {
         this.tileType= type;
-        this.passable = isPassable;
+        this.passable = type.isPassable();
         sprite = new Sprite(type.getTexture());
         transform = new Transform();
         children = new Stack<>();
@@ -60,6 +57,10 @@ public class Tile implements Drawable {
     
     public TileType getTileType() {
         return tileType;
+    }
+    
+    public void setTexture(Texture t) {
+        sprite.setTexture(t);
     }
     
     public Vector2f getPosition() {

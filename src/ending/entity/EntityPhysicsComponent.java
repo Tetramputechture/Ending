@@ -1,4 +1,4 @@
-package ending.entity;
+  package ending.entity;
 
 import ending.component.PhysicsComponent;
 import ending.dungeon.Dungeon;
@@ -31,10 +31,9 @@ public class EntityPhysicsComponent implements PhysicsComponent {
         e.move(velocity.scl(deltaTime.asSeconds()).toVector2f());
         
         // see if entity is colliding with an unpassable tile
-        Tile[][] tiles = dungeon.getTiles();
-        for (int y = 0; y < tiles.length; y++) {
-            for (int x = 0; x < tiles[0].length; x++) {
-                Tile t = tiles[y][x];
+        for (int x = 0; x < dungeon.getSize().x; x++) {
+            for (int y = 0; y < dungeon.getSize().y; y++) {
+                Tile t = dungeon.getTile(x, y);
                 if (!t.isPassable()) {
                     FloatRect area = bounds.intersection(t.getGlobalBounds());
                     if (area != null) {

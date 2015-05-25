@@ -1,6 +1,5 @@
 package ending.dungeon;
 
-import ending.tile.Tile;
 import ending.tile.TileType;
 
 /**
@@ -8,51 +7,46 @@ import ending.tile.TileType;
  * @author Nick
  */
 public class StoneDungeonStyle implements DungeonStyle {
-    
+
     @Override
-    public Tile getUnusedTile() {
-        return new Tile(TileType.UNUSED, false);
+    public TileType getUnusedTileType() {
+        return TileType.UNUSED;
     }
 
     @Override
-    public Tile getVoidTile() {
-        return new Tile(TileType.STONEVOID, false);
+    public TileType getVoidTileType() {
+        return TileType.STONEVOID;
     }
-    
+
     @Override
-    public Tile getWallTile(Direction direction) {
+    public TileType getWallTileType(Direction direction) {
         switch (direction) {
             case NORTH:
-                return new Tile(TileType.STONEWALL_NORTH, false);
-            case WEST:
-                return new Tile(TileType.STONEWALL_WEST, false);
+                return TileType.STONEWALL_NORTH;
             case EAST:
-                return new Tile(TileType.STONEWALL_EAST, false);
+                return TileType.STONEWALL_EAST;
+            case WEST:
+                return TileType.STONEWALL_WEST;
             case SOUTH:
-                return new Tile(TileType.STONEWALL_SOUTH, false);
+                return TileType.STONEWALL_SOUTH;
             default:
-                return new Tile(TileType.STONEWALL_NORTH, false);
+                return TileType.STONEWALL_NORTH;
         }
     }
-    
+
     @Override
-    public Tile getFloorTile() {
-        return new Tile(TileType.STONEFLOOR, true);
+    public TileType getFloorTileType() {
+        return TileType.STONEFLOOR;
     }
 
     @Override
-    public Tile getDoorTile() {
-        return new Tile(TileType.DOOR, false);
+    public TileType getUpStairsTileType() {
+        return TileType.UPSTAIRS;
     }
 
     @Override
-    public Tile getUpStairsTile() {
-        return new Tile(TileType.UPSTAIRS, false);
-    }
-
-    @Override
-    public Tile getDownStairsTile() {
-        return new Tile(TileType.DOWNSTAIRS, false);
+    public TileType getDownStairsTileType() {
+        return TileType.DOWNSTAIRS;
     }
     
 }

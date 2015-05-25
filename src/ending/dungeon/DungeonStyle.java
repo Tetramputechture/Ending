@@ -1,6 +1,6 @@
 package ending.dungeon;
 
-import ending.tile.Tile;
+import ending.tile.TileType;
 
 /**
  *
@@ -8,18 +8,16 @@ import ending.tile.Tile;
  */
 public interface DungeonStyle {
     
-    public Tile getUnusedTile();
+    public TileType getUnusedTileType();
         
-    public Tile getVoidTile();
+    public TileType getVoidTileType();
     
-    public Tile getWallTile(Direction direction);
+    public TileType getWallTileType(Direction direction);
     
-    public Tile getFloorTile();
+    public TileType getFloorTileType();
     
-    public Tile getDoorTile();
+    public TileType getUpStairsTileType();
     
-    public Tile getUpStairsTile();
-    
-    public Tile getDownStairsTile();
+    public TileType getDownStairsTileType();
     
 }
